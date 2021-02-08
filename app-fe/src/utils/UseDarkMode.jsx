@@ -8,11 +8,9 @@ export const UseDarkMode = () => {
 		if (theme === THEME.light) {
 			window.localStorage.setItem("theme", THEME.dark);
 			setTheme(THEME.dark);
-			console.log(THEME.dark);
 		} else {
 			window.localStorage.setItem("theme", THEME.light);
 			setTheme(THEME.light);
-			console.log(THEME.light);
 		}
 	};
 
