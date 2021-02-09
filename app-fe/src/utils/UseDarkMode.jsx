@@ -4,6 +4,8 @@ import { THEME } from "../utils/Constants";
 export const UseDarkMode = () => {
 	const [theme, setTheme] = useState(window.localStorage.getItem("theme") || THEME.light);
 
+	// window.matchMedia('(prefers-color-scheme: dark)').matches)
+
 	const toggleTheme = () => {
 		if (theme === THEME.light) {
 			window.localStorage.setItem("theme", THEME.dark);

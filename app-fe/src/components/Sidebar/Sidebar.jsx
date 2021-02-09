@@ -26,7 +26,7 @@ export default Sidebar;
 const StyledSidebar = styled.div`
 	display: flex;
 	flex-direction: column;
-	flex: 0.25;
+	flex: 0.5;
 	min-width: 200px;
 	max-width: 350px;
 	height: 100vh;

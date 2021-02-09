@@ -13,5 +13,6 @@ const Layout = () => {
 export default Layout;
 
 const StyledLayout = styled.div`
-	flex: 0.75;
+	flex: 1;
+	overflow: hidden;
 `;
