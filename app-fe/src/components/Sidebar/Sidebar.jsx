@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import ExpandMoreRoundedIcon from "@material-ui/icons/ExpandMoreRounded";
-import SidebarContent from "./SidebarChannels";
+import SidebarContent from "./SidebarContent";
 import SidebarProfile from "./SidebarProfile";
 
 const Sidebar = () => {
@@ -12,7 +12,7 @@ const Sidebar = () => {
 				<ExpandMoreRoundedIcon />
 			</SidebarHeader>
 			<SidebarContentWrapper>
-				<SidebarContent></SidebarContent>
+				<SidebarContent />
 			</SidebarContentWrapper>
 			<SidebarFooter>
 				<SidebarProfile />

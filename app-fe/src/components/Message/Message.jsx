@@ -49,7 +49,8 @@ const MessageBodyContent = styled.div`
 const MessageWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
-	width: 100%;
+	min-width: 360px;
+	max-width: 75%;
 	margin-left: 1rem;
 `;
 

@@ -5,13 +5,13 @@ import NotificationsRoundedIcon from "@material-ui/icons/NotificationsRounded";
 import PeopleAltRoundedIcon from "@material-ui/icons/PeopleAltRounded";
 import SearchRoundedIcon from "@material-ui/icons/SearchRounded";
 
-const ChatHeader = () => {
+const ChatHeader = ({channelName}) => {
 	const inputRef = React.createRef();
 	return (
 		<StyledChatHeader>
 			<ChatHeaderContent>
 				<ChatTitle>
-					<h4>Hello Chat!</h4>
+					<h4>{channelName}</h4>
 				</ChatTitle>
 			</ChatHeaderContent>
 			<ChatToolbar>

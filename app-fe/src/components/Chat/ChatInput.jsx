@@ -1,17 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import EmojiEmotionsRoundedIcon from "@material-ui/icons/EmojiEmotionsRounded";
 import GifRoundedIcon from "@material-ui/icons/GifRounded";
 
-const ChatInput = () => {
+const ChatInput = ({ channelId, channelName }) => {
+	const [input, setInput] = useState("");
+	const sendMessage = (e) => {
+		e.preventDefault();
+	};
 	return (
 		<StyledChatInput>
 			<AddCircleRoundedIcon />
 			<MessageForm>
-				<MessageInput contenteditable={"true"}></MessageInput>
-				<div contenteditable='true'>I'm Editable. Edit me!</div>
-				<MessageSubmitBtn>Send message</MessageSubmitBtn>
+				<MessageInput
+					value={input}
+					onChange={(e) => setInput(e.target.value)}
+					disabled={!channelId}
+					placeholder={
+						channelName
+							? `Type message in #${channelName}...`
+							: "Please select the channel..."
+					}
+				/>
+				{/* <div contentEditable='true'>I'm Editable. Edit me!</div> */}
+				<MessageSubmitBtn onClick={sendMessage}>
+					Send message
+				</MessageSubmitBtn>
 			</MessageForm>
 			<ChatInputIcons>
 				<GifRoundedIcon />
@@ -52,9 +67,7 @@ const MessageForm = styled.form`
 // 	outline: none;
 // 	background: #666;
 // `;
-const MessageInput = styled.textarea.attrs(() => ({
-	placeholder: "Type your message...",
-}))`
+const MessageInput = styled.input`
 	flex: 1;
 	height: 1.25rem;
 	color: ${({ theme }) => theme.textPrimary};

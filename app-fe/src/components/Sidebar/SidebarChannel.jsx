@@ -1,12 +1,25 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components/macro";
+import { setChannelInfo } from "../../features/appSlice";
 
-const SidebarChannel = ({ id, channel }) => {
+const SidebarChannel = ({ id, channelName }) => {
+	const dispatch = useDispatch();
+
 	return (
-		<StyledSidebarChannel onClick={() => console.log(new Date(Date.now()))}>
+		<StyledSidebarChannel
+			onClick={() =>
+				dispatch(
+					setChannelInfo({
+						channelId: id,
+						channelName: channelName,
+					})
+				)
+			}
+		>
 			<ChannelLabel>
 				<span>#</span>
-				Channel
+				{channelName}
 			</ChannelLabel>
 		</StyledSidebarChannel>
 	);

@@ -1,24 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import Message from "../Message/Message";
 
-const ChatMessages = () => {
-	const message = [
+const ChatMessages = ({ channelId }) => {
+	const msg_data = [
 		"Hello",
 		"test",
 		"123",
-		"This is very long text. This is very long text. This is very long text. This is very long text. This is very long text. This is very long text. This is very long text.",
+		"This is very long text. This is very long text. This is very long text. This is very long text. This is very long text. This is very long text. This is very long text.This is very long text. This is very long text. This is very long text. This is very long text. This is very long text. This is very long text. This is very long text.",
 		"asd",
 	];
+	const [messages, setMessages] = useState(msg_data);
+
+	useEffect(() => {
+		//database call
+	}, [channelId]);
 	return (
 		<StyledChatMessages>
-			<MessagesWrapper>
-				<Message message={message[0]} />
-				<Message message={message[1]} />
-				<Message message={message[2]} />
-				<Message message={message[3]} />
-				<Message message={message[4]} />
-			</MessagesWrapper>
+			{channelId && (
+				<MessagesWrapper>
+					{messages.map((message) => (
+						<Message message={message} />
+					))}
+				</MessagesWrapper>
+			)}
 		</StyledChatMessages>
 	);
 };

@@ -1,10 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import ExpandMoreRoundedIcon from "@material-ui/icons/ExpandMoreRounded";
 import SidebarChannel from "./SidebarChannel";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
+import db from "../../utils/firebase";
 
 const SidebarContent = () => {
+	const [channels, setChannels] = useState([]);
+
+	useEffect(() => {
+		db.collection("channels").onSnapshot((snapshot) => {
+			setChannels(
+				snapshot.docs.map((doc) => ({
+					id: doc.id,
+					channel: doc.data(),
+				}))
+			);
+		});
+	}, []);
+
+	const handleAddChannel = () => {
+		const channelName = prompt("Enter new channel name");
+
+		if (channelName) {
+			db.collection("channels").add({
+				channelName: channelName,
+			});
+		}
+	};
+
 	return (
 		<StyledSidebarContent>
 			<ChannelHeaderWrapper>
@@ -12,13 +36,12 @@ const SidebarContent = () => {
 					<ExpandMoreRoundedIcon />
 					<h2>Text channels</h2>
 				</ChannelHeader>
-				<StyledAddRoundedIcon />
+				<AddRoundedIcon onClick={handleAddChannel} />
 			</ChannelHeaderWrapper>
 			<ChannelsList>
-				<SidebarChannel></SidebarChannel>
-				<SidebarChannel></SidebarChannel>
-				<SidebarChannel></SidebarChannel>
-				<SidebarChannel></SidebarChannel>
+				{channels.map(({ id, channel }) => (
+					<SidebarChannel key={id} id={id} channelName={channel.channelName} />
+				))}
 			</ChannelsList>
 
 			<ChannelHeaderWrapper>
@@ -26,7 +49,7 @@ const SidebarContent = () => {
 					<ExpandMoreRoundedIcon />
 					<h2>Voice channels</h2>
 				</ChannelHeader>
-				<StyledAddRoundedIcon />
+				<AddRoundedIcon />
 			</ChannelHeaderWrapper>
 		</StyledSidebarContent>
 	);
@@ -56,14 +79,6 @@ const ChannelHeader = styled.div`
 	h2 {
 		font-size: 0.875rem;
 		margin-left: 0.5rem;
-	}
-`;
-
-const StyledAddRoundedIcon = styled(AddRoundedIcon)`
-	cursor: pointer;
-
-	:hover {
-		color: ${({ theme }) => theme.backgroundAccent};
 	}
 `;
 

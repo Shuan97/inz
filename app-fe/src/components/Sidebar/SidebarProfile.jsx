@@ -4,19 +4,24 @@ import styled from "styled-components/macro";
 import MicRoundedIcon from "@material-ui/icons/MicRounded";
 import HeadsetRoundedIcon from "@material-ui/icons/HeadsetRounded";
 import SettingsRoundedIcon from "@material-ui/icons/SettingsRounded";
+import { selectUser } from "../../features/userSlice";
+import { useSelector } from "react-redux";
+import { auth } from "../../utils/firebase";
 
 const SidebarProfile = () => {
+	const user = useSelector(selectUser);
+
 	return (
 		<StyledSidebarProfile>
-			<Avatar src='https://avatars.githubusercontent.com/u/35654946?s=460&u=177d19ab4fef81db30b3bc104be0871e00818822&v=4' />
+			<Avatar src={user.photo} onClick={() => auth.signOut()} />
 			<ProfileInfo>
-				<h3>Jarek Matura</h3>
+				<h3>{user.displayName}</h3>
 				<p>Shuan#0000</p>
 			</ProfileInfo>
 			<ProfileIcons>
 				<MicRoundedIcon />
 				<HeadsetRoundedIcon />
-				<SettingsRoundedIcon />
+				<SettingsRoundedIcon onClick={() => auth.signOut()} />
 			</ProfileIcons>
 		</StyledSidebarProfile>
 	);
