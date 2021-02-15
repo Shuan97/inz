@@ -20,7 +20,7 @@ function App() {
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
 	const notify = () =>
-		toast.info("🦄 This button has no action yet! 😂", {
+		toast.info("🦄 This is 🌯 <burrittto>! 😂", {
 			position: "top-right",
 			autoClose: 5000,
 			hideProgressBar: false,
