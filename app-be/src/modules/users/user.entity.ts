@@ -1,13 +1,27 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { UserChannel } from './../user-channels/user-channel.entity';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  IsUUID,
+  BelongsToMany,
+} from 'sequelize-typescript';
+import { v4 as uuidv4 } from 'uuid';
+import { Channel } from './../channels/channel.entity';
 
 @Table
 export class User extends Model {
+  @IsUUID(4)
   @Column({
-    type: DataType.STRING,
+    type: DataType.UUID,
     unique: true,
     allowNull: false,
+    defaultValue: () => {
+      return uuidv4();
+    },
   })
-  GUID: string;
+  UUID: string;
 
   @Column({
     type: DataType.STRING,
@@ -36,13 +50,24 @@ export class User extends Model {
 
   @Column({
     type: DataType.BOOLEAN,
-    allowNull: true,
+    allowNull: false,
+    defaultValue: false,
   })
-  isAdmin: string;
+  isAdmin: boolean;
 
   @Column({
     type: DataType.BOOLEAN,
-    allowNull: true,
+    allowNull: false,
+    defaultValue: false,
   })
-  isRootAdmin: string;
+  readonly isRootAdmin: boolean;
+
+  // @BeforeCreate
+  // static removePriviliges(instance: User) {
+  //   instance.isAdmin = false;
+  //   instance.isRootAdmin = false;
+  // }
+
+  // @BelongsToMany(() => Channel, () => UserChannel)
+  // channels: (Channel & { UserChannel: UserChannel })[];
 }

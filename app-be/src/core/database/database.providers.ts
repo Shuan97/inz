@@ -1,7 +1,9 @@
+import { Channel } from './../../modules/channels/channel.entity';
 import { Sequelize } from 'sequelize-typescript';
 import { SEQUELIZE, DEVELOPMENT, TEST, PRODUCTION } from '../constants';
 import { databaseConfig } from './database.config';
 import { User } from '../../modules/users/user.entity';
+import { Message } from 'src/modules/messages/message.entity';
 
 export const databaseProviders = [
   {
@@ -22,9 +24,13 @@ export const databaseProviders = [
           config = databaseConfig.development;
       }
       const sequelize = new Sequelize(config);
-      sequelize.addModels([User]);
-      await sequelize.sync();
+
+      // Tables to be generated in database
+      sequelize.addModels([User, Message, Channel]);
+
+      // Force tables to drop and re-create with no data
       // await sequelize.sync({ force: true });
+      await sequelize.sync();
       return sequelize;
     },
   },
