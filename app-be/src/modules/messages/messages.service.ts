@@ -19,32 +19,32 @@ export class MessagesService {
     });
   }
 
-  async findAll(): Promise<Message[]> {
-    return await this.messageRepository.findAll<Message>({
-      include: [{ model: User, attributes: { exclude: ['password'] } }],
-    });
-  }
+  // async findAll(): Promise<Message[]> {
+  //   return await this.messageRepository.findAll<Message>({
+  //     include: [{ model: User, attributes: { exclude: ['password'] } }],
+  //   });
+  // }
 
-  async findOne(id): Promise<Message> {
-    return await this.messageRepository.findOne({
-      where: { id },
-      include: [{ model: User, attributes: { exclude: ['password'] } }],
-    });
-  }
+  // async findOne(id): Promise<Message> {
+  //   return await this.messageRepository.findOne({
+  //     where: { id },
+  //     include: [{ model: User, attributes: { exclude: ['password'] } }],
+  //   });
+  // }
 
-  async delete(id, userId) {
-    return await this.messageRepository.destroy({ where: { id, userId } });
-  }
+  // async delete(id, userId) {
+  //   return await this.messageRepository.destroy({ where: { id, userId } });
+  // }
 
-  async update(id, data, userId) {
-    const [
-      numberOfAffectedRows,
-      [updatedMessage],
-    ] = await this.messageRepository.update(
-      { ...data },
-      { where: { id, userId }, returning: true },
-    );
+  // async update(id, data, userId) {
+  //   const [
+  //     numberOfAffectedRows,
+  //     [updatedMessage],
+  //   ] = await this.messageRepository.update(
+  //     { ...data },
+  //     { where: { id, userId }, returning: true },
+  //   );
 
-    return { numberOfAffectedRows, updatedMessage };
-  }
+  //   return { numberOfAffectedRows, updatedMessage };
+  // }
 }

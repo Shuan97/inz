@@ -19,25 +19,25 @@ import {
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
-  @Get()
-  async findAll() {
-    // get all messages in the db
-    return await this.messagesService.findAll();
-  }
+  // @Get()
+  // async findAll() {
+  //   // get all messages in the db
+  //   return await this.messagesService.findAll();
+  // }
 
-  @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Message> {
-    // find the message with this id
-    const message = await this.messagesService.findOne(id);
+  // @Get(':id')
+  // async findOne(@Param('id') id: number): Promise<Message> {
+  //   // find the message with this id
+  //   const message = await this.messagesService.findOne(id);
 
-    // if the message doesn't exit in the db, throw a 404 error
-    if (!message) {
-      throw new NotFoundException('"This message doesn\'t exist"');
-    }
+  //   // if the message doesn't exit in the db, throw a 404 error
+  //   if (!message) {
+  //     throw new NotFoundException('"This message doesn\'t exist"');
+  //   }
 
-    // if message exist, return the message
-    return message;
-  }
+  //   // if message exist, return the message
+  //   return message;
+  // }
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
@@ -47,42 +47,42 @@ export class MessagesController {
     return await this.messagesService.create(message, req.user.id, 1);
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Put(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() message: MessageDto,
-    @Request() req,
-  ): Promise<Message> {
-    // get the number of row affected and the updated message
-    const {
-      numberOfAffectedRows,
-      updatedMessage,
-    } = await this.messagesService.update(id, message, req.user.id);
+  // @UseGuards(AuthGuard('jwt'))
+  // @Put(':id')
+  // async update(
+  //   @Param('id') id: number,
+  //   @Body() message: MessageDto,
+  //   @Request() req,
+  // ): Promise<Message> {
+  //   // get the number of row affected and the updated message
+  //   const {
+  //     numberOfAffectedRows,
+  //     updatedMessage,
+  //   } = await this.messagesService.update(id, message, req.user.id);
 
-    // if the number of row affected is zero,
-    // it means the message doesn't exist in our db
-    if (numberOfAffectedRows === 0) {
-      throw new NotFoundException('"This message doesn\'t exist"');
-    }
+  //   // if the number of row affected is zero,
+  //   // it means the message doesn't exist in our db
+  //   if (numberOfAffectedRows === 0) {
+  //     throw new NotFoundException('"This message doesn\'t exist"');
+  //   }
 
-    // return the updated message
-    return updatedMessage;
-  }
+  //   // return the updated message
+  //   return updatedMessage;
+  // }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Delete(':id')
-  async remove(@Param('id') id: number, @Request() req) {
-    // delete the message with this id
-    const deleted = await this.messagesService.delete(id, req.user.id);
+  // @UseGuards(AuthGuard('jwt'))
+  // @Delete(':id')
+  // async remove(@Param('id') id: number, @Request() req) {
+  //   // delete the message with this id
+  //   const deleted = await this.messagesService.delete(id, req.user.id);
 
-    // if the number of row affected is zero,
-    // then the message doesn't exist in our db
-    if (deleted === 0) {
-      throw new NotFoundException('"This message doesn\'t exist"');
-    }
+  //   // if the number of row affected is zero,
+  //   // then the message doesn't exist in our db
+  //   if (deleted === 0) {
+  //     throw new NotFoundException('"This message doesn\'t exist"');
+  //   }
 
-    // return success message
-    return 'Successfully deleted';
-  }
+  //   // return success message
+  //   return 'Successfully deleted';
+  // }
 }
