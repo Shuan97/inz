@@ -6,21 +6,31 @@ import {
   ForeignKey,
   Column,
   DataType,
+  BelongsTo,
+  PrimaryKey,
 } from 'sequelize-typescript';
 
 @Table
 export class UserChannel extends Model {
   @ForeignKey(() => User)
+  @PrimaryKey
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: false,
   })
-  userID: number;
+  userUUID: string;
 
   @ForeignKey(() => Channel)
+  @PrimaryKey
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: false,
   })
-  channelUUID: number;
+  channelUUID: string;
+
+  @BelongsTo(() => User)
+  user: User;
+
+  @BelongsTo(() => Channel)
+  channel: Channel;
 }

@@ -19,19 +19,27 @@ export class Message extends Model {
 
   @ForeignKey(() => User)
   @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  userID: number;
-
-  @ForeignKey(() => Channel)
-  @Column({
     type: DataType.UUID,
     allowNull: false,
   })
-  channelUUID: string;
+  userUUID: string;
 
-  @BelongsTo(() => User)
+  // @ForeignKey(() => User)
+  // @Column({
+  //   type: DataType.INTEGER,
+  //   allowNull: false,
+  // })
+  // userUUID: number;
+
+  // @ForeignKey(() => Channel)
+  // @Column({
+  //   type: DataType.UUID,
+  //   allowNull: false,
+  // })
+  // channelUUID: string;
+
+  // @BelongsTo(() => User, { foreignKey: 'UUID' })
+  @BelongsTo(() => User, { foreignKey: 'UUID' })
   user: User;
 
   // @BelongsTo(() => Channel)

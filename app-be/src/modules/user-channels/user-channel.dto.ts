@@ -2,8 +2,8 @@ import { IsNotEmpty } from 'class-validator';
 
 export class UserChannelDto {
   @IsNotEmpty()
-  readonly userID: number;
+  readonly userUUID: string;
 
   @IsNotEmpty()
-  readonly channelUUID: number;
+  readonly channelUUID: string;
 }

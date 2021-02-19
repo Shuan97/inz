@@ -1,4 +1,3 @@
-import { UserChannel } from './../user-channels/user-channel.entity';
 import {
   Table,
   Column,
@@ -6,14 +5,18 @@ import {
   DataType,
   IsUUID,
   BelongsToMany,
+  PrimaryKey,
 } from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid';
 import { Channel } from './../channels/channel.entity';
+import { UserChannel } from './../user-channels/user-channel.entity';
 
 @Table
 export class User extends Model {
   @IsUUID(4)
+  @PrimaryKey
   @Column({
+    primaryKey: true,
     type: DataType.UUID,
     unique: true,
     allowNull: false,
@@ -68,6 +71,14 @@ export class User extends Model {
   //   instance.isRootAdmin = false;
   // }
 
-  @BelongsToMany(() => Channel, () => UserChannel)
+  // @BelongsToMany(() => Channel, {
+  //   foreignKey: 'channelUUID',
+  //   otherKey: 'userUUID',
+  //   through: () => UserChannel,
+  // })
+
+  @BelongsToMany(() => Channel, () => UserChannel, 'userUUID', 'channelUUID')
   channels: (Channel & { UserChannel: UserChannel })[];
+  // @BelongsToMany(() => Channel, { through: 'UserChannel' })
+  // channels: Channel[];
 }

@@ -11,11 +11,14 @@ export class MessagesService {
     private readonly messageRepository: typeof Message,
   ) {}
 
-  async create(message: MessageDto, userID, channelUUID): Promise<Message> {
-    return await this.messageRepository.create<Message>({
+  async create(message: MessageDto, userUUID, channelUUID): Promise<Message> {
+    const data = {
       ...message,
-      userID,
+      userUUID,
       channelUUID,
+    };
+    return await this.messageRepository.create<Message>({
+      ...data,
     });
   }
 
@@ -36,15 +39,15 @@ export class MessagesService {
   //   return await this.messageRepository.destroy({ where: { id, userId } });
   // }
 
-  // async update(id, data, userId) {
-  //   const [
-  //     numberOfAffectedRows,
-  //     [updatedMessage],
-  //   ] = await this.messageRepository.update(
-  //     { ...data },
-  //     { where: { id, userId }, returning: true },
-  //   );
+  async update(id, data, userId) {
+    const [
+      numberOfAffectedRows,
+      [updatedMessage],
+    ] = await this.messageRepository.update(
+      { ...data },
+      { where: { id, userId }, returning: true },
+    );
 
-  //   return { numberOfAffectedRows, updatedMessage };
-  // }
+    return { numberOfAffectedRows, updatedMessage };
+  }
 }

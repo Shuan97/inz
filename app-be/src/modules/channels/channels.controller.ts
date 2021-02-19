@@ -8,7 +8,7 @@ import { Controller, Post, Body, Request, UseGuards } from '@nestjs/common';
 export class ChannelsController {
   constructor(private readonly channelsService: ChannelsService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Post('/new')
   async create(@Body() channel: ChannelDto, @Request() req): Promise<Channel> {
     return await this.channelsService.create(channel, req.user.id);

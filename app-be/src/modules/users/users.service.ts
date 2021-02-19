@@ -22,7 +22,7 @@ export class UsersService {
     return await this.userRepository.findOne<User>({ where: { id } });
   }
 
-  async findOneByUUID(uuid: string): Promise<User> {
-    return await this.userRepository.findOne<User>({ where: { uuid } });
+  async findOneByUUID(UUID: string): Promise<User> {
+    return await this.userRepository.findOne<User>({ where: { UUID } });
   }
 }

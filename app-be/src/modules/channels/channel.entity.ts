@@ -32,17 +32,24 @@ export class Channel extends Model {
   })
   name: string;
 
-  // @ForeignKey(() => User)
+  // @ForeignKey(() => UserChannel)
   // @Column({
-  //   type: DataType.INTEGER,
+  //   type: DataType.UUID,
   //   allowNull: false,
   // })
-  // userID: number;
+  // userUUID: string;
 
   // @BelongsTo(() => User)
   // user: User;
 
-  @BelongsToMany(() => User, { through: () => UserChannel })
+  // @BelongsToMany(() => User, {
+  //   foreignKey: 'userUUID',
+  //   otherKey: 'channelUUID',
+  //   through: () => UserChannel,
+  // })
+
+  @BelongsToMany(() => User, () => UserChannel, 'channelUUID', 'userUUID')
   users: (User & { UserChannel: UserChannel })[];
+  // @BelongsToMany(() => User, { through: 'UserChannel' })
   // users: User[];
 }

@@ -11,10 +11,10 @@ export class ChannelsService {
     private readonly channelsRepository: typeof Channel,
   ) {}
 
-  async create(channel: ChannelDto, userID): Promise<Channel> {
+  async create(channel: ChannelDto, userUUID): Promise<Channel> {
     return await this.channelsRepository.create<Channel>({
       ...channel,
-      userID,
+      userUUID,
     });
   }
 
