@@ -68,6 +68,6 @@ export class User extends Model {
   //   instance.isRootAdmin = false;
   // }
 
-  // @BelongsToMany(() => Channel, () => UserChannel)
-  // channels: (Channel & { UserChannel: UserChannel })[];
+  @BelongsToMany(() => Channel, () => UserChannel)
+  channels: (Channel & { UserChannel: UserChannel })[];
 }

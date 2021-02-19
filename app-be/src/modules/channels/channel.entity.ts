@@ -16,6 +16,7 @@ import { UserChannel } from './../user-channels/user-channel.entity';
 export class Channel extends Model {
   @IsUUID(4)
   @Column({
+    primaryKey: true,
     type: DataType.UUID,
     unique: true,
     allowNull: false,
@@ -31,16 +32,17 @@ export class Channel extends Model {
   })
   name: string;
 
-  @ForeignKey(() => User)
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  userID: number;
+  // @ForeignKey(() => User)
+  // @Column({
+  //   type: DataType.INTEGER,
+  //   allowNull: false,
+  // })
+  // userID: number;
 
-  @BelongsTo(() => User)
-  user: User;
+  // @BelongsTo(() => User)
+  // user: User;
 
-  // @BelongsToMany(() => User, () => UserChannel)
-  // channels: (Channel & { UserChannel: UserChannel })[];
+  @BelongsToMany(() => User, { through: () => UserChannel })
+  users: (User & { UserChannel: UserChannel })[];
+  // users: User[];
 }

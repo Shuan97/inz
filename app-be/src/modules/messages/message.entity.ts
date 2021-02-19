@@ -26,14 +26,14 @@ export class Message extends Model {
 
   @ForeignKey(() => Channel)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.UUID,
     allowNull: false,
   })
-  channelID: number;
+  channelUUID: string;
 
   @BelongsTo(() => User)
   user: User;
 
-  @BelongsTo(() => Channel)
-  channel: Channel;
+  // @BelongsTo(() => Channel)
+  // channel: Channel;
 }

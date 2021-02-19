@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class MessageDto {
+export class ChannelDto {
   @IsNotEmpty()
   readonly name: string;
 }
