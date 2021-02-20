@@ -11,11 +11,10 @@ export class MessagesService {
     private readonly messageRepository: typeof Message,
   ) {}
 
-  async create(message: MessageDto, userUUID, channelUUID): Promise<Message> {
+  async create(message: MessageDto, userUUID): Promise<Message> {
     const data = {
       ...message,
       userUUID,
-      channelUUID,
     };
     return await this.messageRepository.create<Message>({
       ...data,

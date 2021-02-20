@@ -12,8 +12,15 @@ import {
 
 @Table
 export class UserChannel extends Model {
-  @ForeignKey(() => User)
   @PrimaryKey
+  @Column({
+    type: DataType.INTEGER,
+    autoIncrement: true,
+    unique: true,
+  })
+  id: number;
+
+  @ForeignKey(() => User)
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -21,16 +28,15 @@ export class UserChannel extends Model {
   userUUID: string;
 
   @ForeignKey(() => Channel)
-  @PrimaryKey
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   channelUUID: string;
 
-  @BelongsTo(() => User)
-  user: User;
+  // @BelongsTo(() => User)
+  // user: User;
 
-  @BelongsTo(() => Channel)
-  channel: Channel;
+  // @BelongsTo(() => Channel)
+  // channel: Channel;
 }

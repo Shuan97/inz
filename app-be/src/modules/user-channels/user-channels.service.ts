@@ -13,4 +13,8 @@ export class UserChannelsService {
   async create(userChannel: UserChannelDto): Promise<UserChannel> {
     return await this.userChannelsRepository.create<UserChannel>(userChannel);
   }
+
+  async assignUserToChannel(userChannel: UserChannelDto): Promise<UserChannel> {
+    return await this.userChannelsRepository.create<UserChannel>(userChannel);
+  }
 }

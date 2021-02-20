@@ -31,17 +31,17 @@ export class Message extends Model {
   // })
   // userUUID: number;
 
-  // @ForeignKey(() => Channel)
-  // @Column({
-  //   type: DataType.UUID,
-  //   allowNull: false,
-  // })
-  // channelUUID: string;
+  @ForeignKey(() => Channel)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
+  channelUUID: string;
 
   // @BelongsTo(() => User, { foreignKey: 'UUID' })
   @BelongsTo(() => User, { foreignKey: 'UUID' })
   user: User;
 
-  // @BelongsTo(() => Channel)
-  // channel: Channel;
+  @BelongsTo(() => Channel)
+  channel: Channel;
 }

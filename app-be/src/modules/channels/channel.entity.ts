@@ -32,6 +32,11 @@ export class Channel extends Model {
   })
   name: string;
 
+  @Column({
+    type: DataType.UUID,
+  })
+  createdBy: string;
+
   // @ForeignKey(() => UserChannel)
   // @Column({
   //   type: DataType.UUID,
@@ -48,7 +53,7 @@ export class Channel extends Model {
   //   through: () => UserChannel,
   // })
 
-  @BelongsToMany(() => User, () => UserChannel, 'channelUUID', 'userUUID')
+  @BelongsToMany(() => User, () => UserChannel)
   users: (User & { UserChannel: UserChannel })[];
   // @BelongsToMany(() => User, { through: 'UserChannel' })
   // users: User[];

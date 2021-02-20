@@ -44,7 +44,7 @@ export class MessagesController {
   async create(@Body() message: MessageDto, @Request() req): Promise<Message> {
     // create a new message and return the newly created message
     console.log('Msg', message);
-    return await this.messagesService.create(message, req.user.UUID, 1);
+    return await this.messagesService.create(message, req.user.UUID);
   }
 
   // @UseGuards(AuthGuard('jwt'))
