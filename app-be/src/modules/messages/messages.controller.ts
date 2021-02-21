@@ -14,16 +14,17 @@ import {
   Request,
   Delete,
 } from '@nestjs/common';
+import { Public } from 'src/core/decorators/public.decorator';
 
 @Controller('messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
-  // @Get()
-  // async findAll() {
-  //   // get all messages in the db
-  //   return await this.messagesService.findAll();
-  // }
+  @Public()
+  @Get()
+  async findAll() {
+    return await this.messagesService.findAll();
+  }
 
   // @Get(':id')
   // async findOne(@Param('id') id: number): Promise<Message> {

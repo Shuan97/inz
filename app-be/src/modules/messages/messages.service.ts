@@ -9,7 +9,9 @@ export class MessagesService {
   constructor(
     @Inject(MESSAGE_REPOSITORY)
     private readonly messageRepository: typeof Message,
-  ) {}
+  ) {
+    Message.sync({ force: true });
+  }
 
   async create(message: MessageDto, userUUID): Promise<Message> {
     const data = {
@@ -21,11 +23,19 @@ export class MessagesService {
     });
   }
 
-  // async findAll(): Promise<Message[]> {
-  //   return await this.messageRepository.findAll<Message>({
-  //     include: [{ model: User, attributes: { exclude: ['password'] } }],
-  //   });
-  // }
+  async findAll(): Promise<Message[]> {
+    return await this.messageRepository.findAll<Message>({
+      include: [
+        {
+          model: User,
+          // attributes: { include: ['UUID', 'name', 'email', 'nickname'] },
+          attributes: ['UUID', 'name', 'email', 'nickname'],
+        },
+      ],
+      // include: [{ model: User, attributes: { exclude: ['password'] } }],
+      // include: [User],
+    });
+  }
 
   // async findOne(id): Promise<Message> {
   //   return await this.messageRepository.findOne({

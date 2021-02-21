@@ -30,7 +30,7 @@ export const databaseProviders = [
       sequelize.addModels([User, Message, Channel, UserChannel]);
 
       // Force tables to drop and re-create with no data
-      await sequelize.sync({ force: true });
+      // await sequelize.sync({ force: true });
       // await sequelize.sync();
       return sequelize;
     },

@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import Message from "../Message/Message";
@@ -10,9 +11,14 @@ const ChatMessages = ({ channelId }) => {
 		"This is very long text. This is very long text. This is very long text. This is very long text. This is very long text. This is very long text. This is very long text.This is very long text. This is very long text. This is very long text. This is very long text. This is very long text. This is very long text. This is very long text.",
 		"asd",
 	];
-	const [messages, setMessages] = useState(msg_data);
+	const [messages, setMessages] = useState([]);
 
 	useEffect(() => {
+		let messages = [];
+		axios.get("http://localhost:3200/api/v1/messages").then(({ data }) => {
+			console.log(data);
+			setMessages(data);
+		});
 		//database call
 	}, [channelId]);
 	return (
@@ -20,7 +26,7 @@ const ChatMessages = ({ channelId }) => {
 			{channelId && (
 				<MessagesWrapper>
 					{messages.map((message) => (
-						<Message message={message} />
+						<Message key={message.id} message={message} />
 					))}
 				</MessagesWrapper>
 			)}
@@ -33,6 +39,7 @@ export default ChatMessages;
 const StyledChatMessages = styled.div`
 	display: flex;
 	flex: 1;
+	overflow-y: scroll;
 `;
 
 const MessagesWrapper = styled.div`

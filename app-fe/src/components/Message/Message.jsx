@@ -3,18 +3,19 @@ import styled from "styled-components/macro";
 import { Avatar } from "@material-ui/core";
 
 const Message = ({ message }) => {
-	const date = new Date().toDateString();
+	const date = new Date(message.createdAt).toLocaleString();
+	const user = message.user;
 	return (
 		<MessageListItem>
 			<MessageContainer>
 				<Avatar src='https://avatars.githubusercontent.com/u/35654946?s=460&u=177d19ab4fef81db30b3bc104be0871e00818822&v=4' />
 				<MessageWrapper>
 					<MessageHeader>
-						<MessageLabel>Jarek Matura</MessageLabel>
+						<MessageLabel>{user.name}</MessageLabel>
 						<MessageTimestamp>{date}</MessageTimestamp>
 					</MessageHeader>
 
-					<MessageBodyContent>{message}</MessageBodyContent>
+					<MessageBodyContent>{message.body}</MessageBodyContent>
 				</MessageWrapper>
 			</MessageContainer>
 		</MessageListItem>

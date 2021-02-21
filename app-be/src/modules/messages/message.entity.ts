@@ -39,7 +39,7 @@ export class Message extends Model {
   channelUUID: string;
 
   // @BelongsTo(() => User, { foreignKey: 'UUID' })
-  @BelongsTo(() => User, { foreignKey: 'UUID' })
+  @BelongsTo(() => User, { foreignKey: 'userUUID' })
   user: User;
 
   @BelongsTo(() => Channel)
