@@ -4,10 +4,29 @@ import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import EmojiEmotionsRoundedIcon from "@material-ui/icons/EmojiEmotionsRounded";
 import GifRoundedIcon from "@material-ui/icons/GifRounded";
 
-const ChatInput = ({ channelId, channelName }) => {
+import io from "socket.io-client";
+
+const socket = io("http://localhost:4001");
+const emitMessage = (msg) => {
+	socket.emit("messageFromChannel", msg);
+};
+let msg = [];
+function receivedMessage(message) {
+	msg.push(message);
+}
+
+socket.on("messageToChannel", (message) => {
+	console.log(message);
+	receivedMessage(message);
+});
+
+const ChatInput = ({ channelId, channelName, onMessage }) => {
 	const [input, setInput] = useState("");
 	const sendMessage = (e) => {
 		e.preventDefault();
+		emitMessage(input);
+		onMessage(input);
+		setInput("");
 	};
 	return (
 		<StyledChatInput>

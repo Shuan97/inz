@@ -1,3 +1,4 @@
+import { MessagesGateway } from './messages.gateway';
 import { MessageDto } from './message.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Message } from 'src/modules/messages/message.entity';
@@ -18,7 +19,10 @@ import { Public } from 'src/core/decorators/public.decorator';
 
 @Controller('messages')
 export class MessagesController {
-  constructor(private readonly messagesService: MessagesService) {}
+  constructor(
+    private readonly messagesService: MessagesService,
+    private readonly messagesGateway: MessagesGateway,
+  ) {}
 
   @Public()
   @Get()
@@ -42,10 +46,18 @@ export class MessagesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  async create(@Body() message: MessageDto, @Request() req): Promise<Message> {
+  async create(@Body() message: MessageDto, @Request() req) {
     // create a new message and return the newly created message
-    console.log('Msg', message);
-    return await this.messagesService.create(message, req.user.UUID);
+    const query = await this.messagesService
+      .create(message, req.user.UUID)
+      .then((data) => {
+        // this.messagesGateway.handleMessage(data, req);
+        return data;
+      })
+      .catch((err) => {
+        return err;
+      });
+    return query;
   }
 
   // @UseGuards(AuthGuard('jwt'))
