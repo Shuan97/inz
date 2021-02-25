@@ -8,6 +8,7 @@ import { UsersService } from '../users/users.service';
 import { parse } from 'cookie';
 import { ConfigService } from '@nestjs/config';
 import { WsException } from '@nestjs/websockets';
+import { assert } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -99,20 +100,29 @@ export class AuthService {
   }
 
   private async getUserFromAuthenticationToken(token: string) {
+    if (!token) {
+      this.logger.error('JWT token is undefined');
+      return null;
+    }
     const payload: ITokenPayload = this.jwtService.verify(token, {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
     });
     if (payload.UUID) {
       return this.userService.findOneByUUID(payload.UUID);
     }
+    this.logger.error('JWT token error');
+    return null;
   }
 
   public async getUserFromSocket(socket: Socket) {
     const cookie = socket.handshake.headers.cookie;
     const { Authentication: authenticationToken } = parse(cookie);
     const user = await this.getUserFromAuthenticationToken(authenticationToken);
+
     if (!user) {
-      throw new WsException('Invalide credentials.');
+      this.logger.error('Invalid user credentials');
+      return null;
+      throw new UnauthorizedException('Invalid user credentials');
     }
     return user;
   }

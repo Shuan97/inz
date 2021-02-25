@@ -25,8 +25,9 @@ export class MessagesGateway
   private messageLogger: Logger = new Logger('Message');
 
   async handleConnection(socket: Socket, ...args: any[]) {
-    // await this.authService.getUserFromSocket(socket);
+    // this.logger.log(socket.handshake.headers);
     this.logger.log(`Client connected: ${socket.id}`);
+    await this.authService.getUserFromSocket(socket);
   }
 
   afterInit(server: Server) {
