@@ -14,6 +14,7 @@ import {
   Body,
   Request,
   Delete,
+  Logger,
 } from '@nestjs/common';
 import { Public } from 'src/core/decorators/public.decorator';
 
@@ -23,6 +24,8 @@ export class MessagesController {
     private readonly messagesService: MessagesService,
     private readonly messagesGateway: MessagesGateway,
   ) {}
+
+  private messageLogger: Logger = new Logger('MessageController');
 
   @Public()
   @Get()
@@ -48,6 +51,8 @@ export class MessagesController {
   @Post()
   async create(@Body() message: MessageDto, @Request() req) {
     // create a new message and return the newly created message
+    this.messageLogger.log(`User: ${req.user.UUID}`);
+    this.messageLogger.log(`Authorization: ${req.headers.authorization}`);
     const query = await this.messagesService
       .create(message, req.user.UUID)
       .then((data) => {

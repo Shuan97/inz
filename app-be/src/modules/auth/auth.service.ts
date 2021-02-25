@@ -1,27 +1,37 @@
+import { ITokenPayload } from './interfaces/tokenPayload.intefrace';
+import { Socket } from 'socket.io';
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
+import { parse } from 'cookie';
+import { ConfigService } from '@nestjs/config';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
-  async validateUser(email: string, pass: string) {
+  private logger: Logger = new Logger('AuthService');
+
+  async validateUser(email: string, plainTextPassword: string) {
     // find if user exist with this email
     const user = await this.userService.findOneByEmail(email);
     if (!user) {
-      return null;
+      this.logger.error('Invalid user email');
+      throw new UnauthorizedException('Invalid user credentials');
     }
 
     // find if user password match
-    const match = await this.comparePassword(pass, user.password);
+    const match = await this.comparePassword(plainTextPassword, user.password);
     if (!match) {
-      return null;
+      this.logger.error('Invalid user password');
+      throw new UnauthorizedException('Invalid user credentials');
     }
 
     // tslint:disable-next-line: no-string-literal
@@ -49,12 +59,12 @@ export class AuthService {
    */
   public async create(user) {
     // hash the password
-    const pass = await this.hashPassword(user.password);
+    const hashedPassword = await this.hashPassword(user.password);
 
     // create the user
     const newUser = await this.userService.create({
       ...user,
-      password: pass,
+      password: hashedPassword,
     });
 
     // tslint:disable-next-line: no-string-literal
@@ -83,8 +93,35 @@ export class AuthService {
     return hash;
   }
 
-  private async comparePassword(enteredPassword, dbPassword) {
-    const match = await bcrypt.compare(enteredPassword, dbPassword);
+  private async comparePassword(enteredPassword, hashedPasswrod) {
+    const match = await bcrypt.compare(enteredPassword, hashedPasswrod);
     return match;
+  }
+
+  private async getUserFromAuthenticationToken(token: string) {
+    const payload: ITokenPayload = this.jwtService.verify(token, {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+    });
+    if (payload.UUID) {
+      return this.userService.findOneByUUID(payload.UUID);
+    }
+  }
+
+  public async getUserFromSocket(socket: Socket) {
+    const cookie = socket.handshake.headers.cookie;
+    const { Authentication: authenticationToken } = parse(cookie);
+    const user = await this.getUserFromAuthenticationToken(authenticationToken);
+    if (!user) {
+      throw new WsException('Invalide credentials.');
+    }
+    return user;
+  }
+
+  public getCookieWithJwtToken(UUID: string) {
+    const payload: ITokenPayload = { UUID };
+    const token = this.jwtService.sign(payload);
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'JWT_EXPIRATION_TIME',
+    )}`;
   }
 }
