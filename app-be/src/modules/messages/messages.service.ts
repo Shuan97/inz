@@ -18,6 +18,9 @@ export class MessagesService {
       ...message,
       userUUID,
     };
+    // return await this.messageRepository.create<Message>({
+    //   ...data,
+    // });
     return await this.messageRepository.create<Message>({
       ...data,
     });
@@ -37,12 +40,18 @@ export class MessagesService {
     });
   }
 
-  // async findOne(id): Promise<Message> {
-  //   return await this.messageRepository.findOne({
-  //     where: { id },
-  //     include: [{ model: User, attributes: { exclude: ['password'] } }],
-  //   });
-  // }
+  async findOne(id: number): Promise<Message> {
+    return await this.messageRepository.findOne({
+      where: { id },
+      include: [
+        {
+          model: User,
+          // attributes: { include: ['UUID', 'name', 'email', 'nickname'] },
+          attributes: ['UUID', 'name', 'email', 'nickname'],
+        },
+      ],
+    });
+  }
 
   // async delete(id, userId) {
   //   return await this.messageRepository.destroy({ where: { id, userId } });

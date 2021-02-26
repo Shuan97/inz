@@ -53,16 +53,7 @@ export class MessagesController {
     // create a new message and return the newly created message
     this.messageLogger.log(`User: ${req.user.UUID}`);
     this.messageLogger.log(`Authorization: ${req.headers.authorization}`);
-    const query = await this.messagesService
-      .create(message, req.user.UUID)
-      .then((data) => {
-        // this.messagesGateway.handleMessage(data, req);
-        return data;
-      })
-      .catch((err) => {
-        return err;
-      });
-    return query;
+    return await this.messagesService.create(message, req.user.UUID);
   }
 
   // @UseGuards(AuthGuard('jwt'))

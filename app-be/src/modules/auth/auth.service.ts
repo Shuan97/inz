@@ -1,3 +1,4 @@
+import { User } from './../users/user.entity';
 import { ITokenPayload } from './interfaces/tokenPayload.intefrace';
 import { Socket } from 'socket.io';
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -7,8 +8,6 @@ import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { parse } from 'cookie';
 import { ConfigService } from '@nestjs/config';
-import { WsException } from '@nestjs/websockets';
-import { assert } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -100,8 +99,12 @@ export class AuthService {
   }
 
   private async getUserFromAuthenticationToken(token: string) {
+    // !token &&
+    // (token =
+    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiNWYxMzcyNTctZDZjNi00NjA2LTg4ZWUtOGY0YjQ1NTFlYmJlIiwiaWF0IjoxNjE0MjIxNjQ5LCJleHAiOjE2MTQzOTQ0NDl9.-AFkjI56O-VqGQJcZS5BaR687LEuYP-GvMfYmNvz80c');
     if (!token) {
       this.logger.error('JWT token is undefined');
+      // Remove
       return null;
     }
     const payload: ITokenPayload = this.jwtService.verify(token, {
@@ -114,15 +117,14 @@ export class AuthService {
     return null;
   }
 
-  public async getUserFromSocket(socket: Socket) {
+  public async getUserFromSocket(socket: Socket): Promise<User> {
     const cookie = socket.handshake.headers.cookie;
     const { Authentication: authenticationToken } = parse(cookie);
+
     const user = await this.getUserFromAuthenticationToken(authenticationToken);
 
     if (!user) {
       this.logger.error('Invalid user credentials');
-      return null;
-      throw new UnauthorizedException('Invalid user credentials');
     }
     return user;
   }
@@ -130,8 +132,11 @@ export class AuthService {
   public getCookieWithJwtToken(UUID: string) {
     const payload: ITokenPayload = { UUID };
     const token = this.jwtService.sign(payload);
-    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+    return `Authentication=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${this.configService.get(
       'JWT_EXPIRATION_TIME',
     )}`;
+    // return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+    //   'JWT_EXPIRATION_TIME',
+    // )}`;
   }
 }

@@ -3,22 +3,22 @@ import React from "react";
 import styled from "styled-components/macro";
 import { auth, provider } from "../../utils/firebase";
 
-const Login = () => {
+const LoginWithFirebase = () => {
 	const signIn = () => {
 		auth.signInWithPopup(provider).catch((error) => alert(error.message));
 	};
 	return (
-		<StyledLogin>
+		<StyledLoginWithFirebase>
 			<LoginCard>
 				<Button onClick={signIn}>Sign in</Button>
 			</LoginCard>
-		</StyledLogin>
+		</StyledLoginWithFirebase>
 	);
 };
 
-export default Login;
+export default LoginWithFirebase;
 
-const StyledLogin = styled.div`
+const StyledLoginWithFirebase = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;

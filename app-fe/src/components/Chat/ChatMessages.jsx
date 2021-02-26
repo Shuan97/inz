@@ -6,16 +6,13 @@ import Message from "../Message/Message";
 const ChatMessages = ({ channelId, messages }) => {
 	return (
 		<StyledChatMessages>
-			{
-				(channelId && console.log(messages),
-				(
-					<MessagesWrapper>
-						{messages.map((message) => (
-							<Message key={message.id} message={message} />
-						))}
-					</MessagesWrapper>
-				))
-			}
+			{channelId && (
+				<MessagesWrapper>
+					{messages.map((message) => (
+						<Message key={message.id} message={message} />
+					))}
+				</MessagesWrapper>
+			)}
 		</StyledChatMessages>
 	);
 };

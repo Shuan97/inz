@@ -11,7 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "./features/userSlice";
-import Login from "./components/Login/Login";
+import Login from "./components/Auth/Login";
 import { auth } from "./utils/firebase";
 import { login, logout } from "./features/userSlice";
 

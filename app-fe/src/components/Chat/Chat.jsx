@@ -6,7 +6,7 @@ import ChatMessages from "./ChatMessages";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 import { selectChannelId, selectChannelName } from "../../features/appSlice";
-import axios from "axios";
+import API from "../../utils/API";
 
 const Chat = () => {
 	// const user = useSelector(selectUser);
@@ -22,44 +22,38 @@ const Chat = () => {
 		headers: { Authorization: `Bearer ${token}` },
 	};
 
-	const handleOnMessage = (newMessage) => {
-		// setMessages(...messages, newMessage);
-		// console.log("new message: ", newMessage);
-		// axios
-		// 	.post(
-		// 		"http://localhost:3200/api/v1/messages",
-		// 		{
-		// 			body: "Hello Messages!",
-		// 			channelUUID: "d74e70a5-7015-4a1d-b0e6-eb0cb4279b11",
-		// 		},
-		// 		config
-		// 	)
-		// 	.then(({ data }) => {
-		// 		console.log(data);
-		// 		// setMessages(data);
-		// 	});
-	};
+	// const handleOnMessage = (newMessage) => {
+	// setMessages(...messages, newMessage);
+	// console.log("new message: ", newMessage);
+	// axios
+	// 	.post(
+	// 		"http://localhost:3200/api/v1/messages",
+	// 		{
+	// 			body: "Hello Messages!",
+	// 			channelUUID: "d74e70a5-7015-4a1d-b0e6-eb0cb4279b11",
+	// 		},
+	// 		config
+	// 	)
+	// 	.then(({ data }) => {
+	// 		console.log(data);
+	// 		// setMessages(data);
+	// 	});
+	// };
 
 	useEffect(() => {
-		axios.get("http://localhost:3200/api/v1/messages").then(({ data }) => {
+		API.get("/messages").then(({ data }) => {
 			console.log(data);
 			setMessages(data);
 		});
 		// database call
 	}, [channelId]);
 
-	useEffect(() => {
-		console.log("dupa");
-	}, [channelId]);
+	useEffect(() => {}, [channelId]);
 	return (
 		<StyledChat>
 			<ChatHeader channelName={channelName} />
 			<ChatMessages channelId={channelId} messages={messages} />
-			<ChatInput
-				channelId={channelId}
-				channelName={channelName}
-				onMessage={handleOnMessage}
-			/>
+			<ChatInput channelId={channelId} channelName={channelName} />
 		</StyledChat>
 	);
 };

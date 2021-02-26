@@ -5,8 +5,7 @@ import {
   HttpCode,
   Logger,
   Post,
-  Request,
-  Response,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -34,13 +33,11 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req: any, @Response() res: any) {
-    const { user } = req;
+  async login(@Req() request: any) {
+    const { user } = request;
     const cookie = this.authService.getCookieWithJwtToken(user.UUID);
-    res.setHeader('Set-Cookie', cookie);
-    this.logger.log(cookie);
-    this.logger.log(user.UUID);
-    return res.send(user);
-    // return await this.authService.login(req.user);
+    request.res.setHeader('Set-Cookie', [cookie]);
+    this.logger.log(`User succesfully logged in: ${user?.email}`);
+    return user;
   }
 }

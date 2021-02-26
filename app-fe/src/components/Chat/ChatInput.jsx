@@ -1,33 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import EmojiEmotionsRoundedIcon from "@material-ui/icons/EmojiEmotionsRounded";
 import GifRoundedIcon from "@material-ui/icons/GifRounded";
-
 import io from "socket.io-client";
 
-const socket = io("http://localhost:4001");
-const emitMessage = (msg) => {
-	socket.emit("messageFromChannel", msg);
-};
-let msg = [];
-function receivedMessage(message) {
-	msg.push(message);
-}
+const ChatInput = ({ channelId, channelName }) => {
+	const [socket, setSocket] = useState(null);
 
-socket.on("messageToChannel", (message) => {
-	console.log(message);
-	receivedMessage(message);
-});
+	// establish socket connection
 
-const ChatInput = ({ channelId, channelName, onMessage }) => {
+	// const socket = io("http://localhost:4001");
+
 	const [input, setInput] = useState("");
-	const sendMessage = (e) => {
+
+	const handleNewMessage = (e) => {
 		e.preventDefault();
-		emitMessage(input);
-		onMessage(input);
+		if (input.length <= 0) return;
+		socket.emit("messageFromChannel", input);
 		setInput("");
 	};
+
+	useEffect(() => {
+		setSocket(io("http://localhost:4001"));
+	}, []);
+
+	useEffect(() => {
+		if (!socket) return;
+		socket.on("messageToChannel", (message) => {
+			console.log(message);
+		});
+	}, [socket]);
+
 	return (
 		<StyledChatInput>
 			<AddCircleRoundedIcon />
@@ -43,7 +47,7 @@ const ChatInput = ({ channelId, channelName, onMessage }) => {
 					}
 				/>
 				{/* <div contentEditable='true'>I'm Editable. Edit me!</div> */}
-				<MessageSubmitBtn onClick={sendMessage}>
+				<MessageSubmitBtn onClick={handleNewMessage}>
 					Send message
 				</MessageSubmitBtn>
 			</MessageForm>

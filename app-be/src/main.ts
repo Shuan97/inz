@@ -10,8 +10,28 @@ async function bootstrap() {
   app.use(cookieParser());
   app.enableCors({
     origin: 'http://localhost:3000',
-    // credentials: false,
+    allowedHeaders: [
+      // 'Accept',
+      'Authorization',
+      'Content-Type',
+      // 'Origin',
+      // 'Cookie',
+      // 'Set-Cookie',
+      // 'X-Requested-With',
+      // 'X-XSRF-TOKEN',
+    ],
+    methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
+    credentials: true,
   });
+  // app.use((req, res, next) => {
+  //   // res.header('Access-Control-Allow-Origin', '*');
+  //   res.header(
+  //     'Access-Control-Allow-Headers',
+  //     'Origin, X-Requested-With, Content-Type, Accept, Authentication, Set-Cookie',
+  //   );
+  //   res.header('withCredentials', true);
+  //   next();
+  // });
   await app.listen(process.env.PORT);
   // tslint:disable-next-line: no-console
   console.log(

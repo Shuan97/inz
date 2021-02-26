@@ -3,6 +3,7 @@ import { MessagesService } from './messages.service';
 import { Message } from 'src/modules/messages/message.entity';
 import { Logger, Request } from '@nestjs/common';
 import {
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -16,7 +17,10 @@ import { Server, Socket } from 'socket.io';
 @WebSocketGateway(4001)
 export class MessagesGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly messagesService: MessagesService,
+  ) {}
 
   @WebSocketServer()
   server: Server;
@@ -26,8 +30,8 @@ export class MessagesGateway
 
   async handleConnection(socket: Socket, ...args: any[]) {
     // this.logger.log(socket.handshake.headers);
-    this.logger.log(`Client connected: ${socket.id}`);
-    await this.authService.getUserFromSocket(socket);
+    const user = await this.authService.getUserFromSocket(socket);
+    this.logger.log(`Client connected: ${socket.id}, [User]: ${user?.email}`);
   }
 
   afterInit(server: Server) {
@@ -39,8 +43,19 @@ export class MessagesGateway
   }
 
   @SubscribeMessage('messageFromChannel')
-  handleMessage(@MessageBody() message: Message, @Request() req) {
-    this.messageLogger.log(message);
-    this.server.emit('messageToChannel', message);
+  async handleMessage(
+    @MessageBody() content: string,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    const user = await this.authService.getUserFromSocket(socket);
+    const message = await this.messagesService.create(
+      { body: content, channelUUID: 'd74e70a5-7015-4a1d-b0e6-eb0cb4279b11' },
+      user.UUID,
+    );
+    const messageWithUser = await this.messagesService.findOne(message.id);
+    this.messageLogger.log(messageWithUser);
+    this.messageLogger.log(user.UUID);
+    // this.messageLogger.log(messageWithUser);
+    this.server.emit('messageToChannel', messageWithUser);
   }
 }
