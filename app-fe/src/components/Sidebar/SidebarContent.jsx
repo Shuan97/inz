@@ -3,29 +3,29 @@ import styled from "styled-components/macro";
 import ExpandMoreRoundedIcon from "@material-ui/icons/ExpandMoreRounded";
 import SidebarChannel from "./SidebarChannel";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
-import db from "../../utils/firebase";
+// import db from "../../utils/firebase";
 
 const SidebarContent = () => {
 	const [channels, setChannels] = useState([]);
 
 	useEffect(() => {
-		db.collection("channels").onSnapshot((snapshot) => {
-			setChannels(
-				snapshot.docs.map((doc) => ({
-					id: doc.id,
-					channel: doc.data(),
-				}))
-			);
-		});
+		// db.collection("channels").onSnapshot((snapshot) => {
+		// 	setChannels(
+		// 		snapshot.docs.map((doc) => ({
+		// 			id: doc.id,
+		// 			channel: doc.data(),
+		// 		}))
+		// 	);
+		// });
 	}, []);
 
 	const handleAddChannel = () => {
 		const channelName = prompt("Enter new channel name");
 
 		if (channelName) {
-			db.collection("channels").add({
-				channelName: channelName,
-			});
+			// db.collection("channels").add({
+			// 	channelName: channelName,
+			// });
 		}
 	};
 
@@ -40,7 +40,11 @@ const SidebarContent = () => {
 			</ChannelHeaderWrapper>
 			<ChannelsList>
 				{channels.map(({ id, channel }) => (
-					<SidebarChannel key={id} id={id} channelName={channel.channelName} />
+					<SidebarChannel
+						key={id}
+						id={id}
+						channelName={channel.channelName}
+					/>
 				))}
 			</ChannelsList>
 

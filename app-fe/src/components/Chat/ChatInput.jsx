@@ -7,12 +7,11 @@ import io from "socket.io-client";
 
 const ChatInput = ({ channelId, channelName }) => {
 	const [socket, setSocket] = useState(null);
+	const [input, setInput] = useState("");
 
 	// establish socket connection
 
 	// const socket = io("http://localhost:4001");
-
-	const [input, setInput] = useState("");
 
 	const handleNewMessage = (e) => {
 		e.preventDefault();
@@ -26,7 +25,12 @@ const ChatInput = ({ channelId, channelName }) => {
 	}, []);
 
 	useEffect(() => {
-		if (!socket) return;
+		if (!socket) {
+			console.error("socket is null");
+			return;
+		} else {
+			console.log("socket is ready");
+		}
 		socket.on("messageToChannel", (message) => {
 			console.log(message);
 		});

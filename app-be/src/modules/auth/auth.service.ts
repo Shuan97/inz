@@ -107,11 +107,15 @@ export class AuthService {
       // Remove
       return null;
     }
-    const payload: ITokenPayload = this.jwtService.verify(token, {
-      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
-    });
-    if (payload.UUID) {
-      return this.userService.findOneByUUID(payload.UUID);
+    try {
+      const payload: ITokenPayload = this.jwtService.verify(token, {
+        secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      });
+      if (payload.UUID) {
+        return this.userService.findOneByUUID(payload.UUID);
+      }
+    } catch (error) {
+      this.logger.error(`Expired? ${error}`);
     }
     this.logger.error('JWT token error');
     return null;

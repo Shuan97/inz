@@ -15,13 +15,6 @@ const Chat = () => {
 
 	const [messages, setMessages] = useState([]);
 
-	const token =
-		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiZjVlNzNlYjQtNjhlMy00YmNlLTg4NzgtZDg5MmMzMjc4YmFmIiwibmFtZSI6IlVzZXIxIiwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20iLCJuaWNrbmFtZSI6Ik5pY2tuYW1lIiwiaXNBZG1pbiI6ZmFsc2UsImlzUm9vdEFkbWluIjpmYWxzZSwiY3JlYXRlZEF0IjoiMjAyMS0wMi0yMFQyMzoxMjo1NC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0wMi0yMFQyMzoxMjo1NC4wMDBaIiwiaWF0IjoxNjE0MDM2ODgwLCJleHAiOjE2MTQyMDk2ODB9.C8Tyb3lWGLP-Mn01ozFOMy6_nEfW30Qt4_sOaWxCQ20";
-
-	const config = {
-		headers: { Authorization: `Bearer ${token}` },
-	};
-
 	// const handleOnMessage = (newMessage) => {
 	// setMessages(...messages, newMessage);
 	// console.log("new message: ", newMessage);

@@ -53,7 +53,9 @@ export class MessagesGateway
       user.UUID,
     );
     const messageWithUser = await this.messagesService.findOne(message.id);
-    this.messageLogger.log(messageWithUser);
+    this.messageLogger.log(
+      `User: ${messageWithUser.user.name} | message: ${messageWithUser.body}`,
+    );
     this.messageLogger.log(user.UUID);
     // this.messageLogger.log(messageWithUser);
     this.server.emit('messageToChannel', messageWithUser);

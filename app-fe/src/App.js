@@ -12,12 +12,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "./features/userSlice";
 import Login from "./components/Auth/Login";
-import { auth } from "./utils/firebase";
+// import { auth } from "./utils/firebase";
 import { login, logout } from "./features/userSlice";
 
 function App() {
 	const [theme, toggleTheme] = UseDarkMode();
-	const dispatch = useDispatch();
+	// const dispatch = useDispatch();
 	const user = useSelector(selectUser);
 	const notify = () =>
 		toast.info("🦄 This is 🌯 <burrittto>! 😂", {
@@ -30,22 +30,22 @@ function App() {
 			progress: undefined,
 		});
 
-	useEffect(() => {
-		auth.onAuthStateChanged((authUser) => {
-			if (authUser) {
-				dispatch(
-					login({
-						uid: authUser.uid,
-						photo: authUser.photoURL,
-						email: authUser.email,
-						displayName: authUser.displayName,
-					})
-				);
-			} else {
-				dispatch(logout());
-			}
-		});
-	}, [dispatch]);
+	// useEffect(() => {
+	// 	auth.onAuthStateChanged((authUser) => {
+	// 		if (authUser) {
+	// 			dispatch(
+	// 				login({
+	// 					uid: authUser.uid,
+	// 					photo: authUser.photoURL,
+	// 					email: authUser.email,
+	// 					displayName: authUser.displayName,
+	// 				})
+	// 			);
+	// 		} else {
+	// 			dispatch(logout());
+	// 		}
+	// 	});
+	// }, [dispatch]);
 
 	return (
 		<ThemeProvider theme={theme === THEME.light ? light : dark}>
