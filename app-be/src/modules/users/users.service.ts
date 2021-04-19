@@ -3,6 +3,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserDto } from './dto/user.dto';
 import { USER_REPOSITORY } from '../../core/constants';
+import { toUserDto } from 'utils/mapper';
 
 @Injectable()
 export class UsersService {
@@ -18,12 +19,8 @@ export class UsersService {
     return await this.userRepository.findOne<User>({ where: { email } });
   }
 
-  // UNUSED
-  // async findOneById(id: number): Promise<User> {
-  //   return await this.userRepository.findOne<User>({ where: { id } });
-  // }
-
-  async findOneByUUID(UUID: string): Promise<User> {
-    return await this.userRepository.findOne<User>({ where: { UUID } });
+  async findOneByUUID(UUID: string): Promise<UserDto> {
+    const user = await this.userRepository.findOne<User>({ where: { UUID } });
+    return toUserDto(user);
   }
 }

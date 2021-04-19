@@ -1,6 +1,6 @@
 import { UserChannelDto } from './user-channel.dto';
 import { UserChannel } from './user-channel.entity';
-import { USER_CHANNEL_REPOSITORY } from 'src/core/constants';
+import { USER_CHANNEL_REPOSITORY } from 'core/constants';
 import { Inject, Injectable } from '@nestjs/common';
 
 @Injectable()

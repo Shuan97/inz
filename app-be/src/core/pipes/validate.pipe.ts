@@ -6,6 +6,9 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 
+/**
+ * Used to validate all endpoints with DTO using class-validator
+ */
 @Injectable()
 export class ValidateInputPipe extends ValidationPipe {
   public async transform(value, metadata: ArgumentMetadata) {
@@ -23,6 +26,7 @@ export class ValidateInputPipe extends ValidationPipe {
   //     return error;
   //   }
   private handleError(errors) {
-    return errors.response.message.map((error) => error);
+    // return errors.response.message.map((error) => error);
+    return errors.map((error) => error.constraints);
   }
 }

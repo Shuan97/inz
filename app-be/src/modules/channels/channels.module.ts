@@ -3,7 +3,7 @@ import { Channel } from './channel.entity';
 import { Module } from '@nestjs/common';
 import { ChannelsService } from './channels.service';
 import { ChannelsController } from './channels.controller';
-import { CHANNEL_REPOSITORY } from 'src/core/constants';
+import { CHANNEL_REPOSITORY } from 'core/constants';
 
 @Module({
   imports: [UserChannelsModule],

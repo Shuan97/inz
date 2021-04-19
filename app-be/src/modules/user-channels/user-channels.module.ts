@@ -2,7 +2,7 @@ import { UserChannel } from './user-channel.entity';
 import { Module } from '@nestjs/common';
 import { UserChannelsService } from './user-channels.service';
 import { UserChannelsController } from './user-channels.controller';
-import { USER_CHANNEL_REPOSITORY } from 'src/core/constants';
+import { USER_CHANNEL_REPOSITORY } from 'core/constants';
 
 @Module({
   exports: [UserChannelsModule, UserChannelsService],

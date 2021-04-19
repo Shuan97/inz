@@ -29,6 +29,11 @@ import { APP_GUARD } from '@nestjs/core';
   providers: [
     AuthService,
     LocalStrategy,
+    /**
+     * Enable authentication globally
+     *
+     * Learn more - [NestJS/auth](https://docs.nestjs.com/security/authentication#enable-authentication-globally)
+     */
     JwtStrategy,
     {
       provide: APP_GUARD,

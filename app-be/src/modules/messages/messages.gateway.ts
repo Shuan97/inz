@@ -1,6 +1,6 @@
 import { AuthService } from './../auth/auth.service';
 import { MessagesService } from './messages.service';
-import { Message } from 'src/modules/messages/message.entity';
+import { Message } from 'modules/messages/message.entity';
 import { Logger, Request } from '@nestjs/common';
 import {
   ConnectedSocket,

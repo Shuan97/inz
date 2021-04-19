@@ -2,16 +2,20 @@ import { DoesUserExist } from './../../core/guards/doesUserExist.guard';
 import {
   Body,
   Controller,
+  Get,
+  Headers,
   HttpCode,
   Logger,
   Post,
   Req,
+  Request,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserDto } from '../users/dto/user.dto';
-import { LocalAuthGuard } from 'src/core/guards/localAuth.guard';
-import { Public } from 'src/core/decorators/public.decorator';
+import { LocalAuthGuard } from 'core/guards/localAuth.guard';
+import { Public } from 'core/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -20,7 +24,7 @@ export class AuthController {
   private logger: Logger = new Logger('AuthController');
 
   /**
-   * @alias Public() decoratod defines if path is available for unauthorized users
+   * @alias Public() decorator defines if path is available for unauthorized users
    */
   @Public()
   @UseGuards(DoesUserExist)
@@ -35,9 +39,29 @@ export class AuthController {
   @Post('login')
   async login(@Req() request: any) {
     const { user } = request;
-    const cookie = this.authService.getCookieWithJwtToken(user.UUID);
-    request.res.setHeader('Set-Cookie', [cookie]);
-    this.logger.log(`User succesfully logged in: ${user?.email}`);
+    // const cookie = this.authService.getCookieWithJwtToken(user.UUID);
+    // request.res.setHeader('Set-Cookie', [cookie]);
+    const token = this.authService.getJwtToken(user.UUID);
+    // this.logger.log(`User successfully logged in: ${user?.email}`);
+    return token;
+  }
+
+  @HttpCode(200)
+  @Get('me')
+  async me(@Headers() headers) {
+    const user = await this.authService.getUserFromDatabaseUsingAuthToken(
+      headers.authorization,
+    );
+    return user || { error: 'error' };
+  }
+
+  @Get('profile')
+  async getProfile(@Request() req) {
+    if (!req.user) {
+      this.logger.error('[req.user] does not exist in /profile');
+      throw new UnauthorizedException();
+    }
+    const user = await this.authService.getUserFromResponse(req.user.UUID);
     return user;
   }
 }

@@ -1,13 +1,12 @@
 import { User } from './../users/user.entity';
-import { ITokenPayload } from './interfaces/tokenPayload.intefrace';
+import { ITokenPayload } from './interfaces/tokenPayload.interface';
 import { Socket } from 'socket.io';
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, UnauthorizedException, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
-import { parse } from 'cookie';
 import { ConfigService } from '@nestjs/config';
+import { UserDto } from 'modules/users/dto/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -20,8 +19,9 @@ export class AuthService {
   private logger: Logger = new Logger('AuthService');
 
   async validateUser(email: string, plainTextPassword: string) {
-    // find if user exist with this email
     const user = await this.userService.findOneByEmail(email);
+
+    // find if user exist with this email
     if (!user) {
       this.logger.error('Invalid user email');
       throw new UnauthorizedException('Invalid user credentials');
@@ -79,7 +79,7 @@ export class AuthService {
   /**
    * @function generateToken generates a token and then returns it.
    */
-  private async generateToken(user) {
+  private async generateToken(user): Promise<string> {
     const token = await this.jwtService.signAsync(user);
     return token;
   }
@@ -93,15 +93,12 @@ export class AuthService {
     return hash;
   }
 
-  private async comparePassword(enteredPassword, hashedPasswrod) {
-    const match = await bcrypt.compare(enteredPassword, hashedPasswrod);
+  private async comparePassword(enteredPassword, hashedPassword) {
+    const match = await bcrypt.compare(enteredPassword, hashedPassword);
     return match;
   }
 
-  private async getUserFromAuthenticationToken(token: string) {
-    // !token &&
-    // (token =
-    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiNWYxMzcyNTctZDZjNi00NjA2LTg4ZWUtOGY0YjQ1NTFlYmJlIiwiaWF0IjoxNjE0MjIxNjQ5LCJleHAiOjE2MTQzOTQ0NDl9.-AFkjI56O-VqGQJcZS5BaR687LEuYP-GvMfYmNvz80c');
+  public async getUserFromDatabaseUsingAuthToken(token: string) {
     if (!token) {
       this.logger.error('JWT token is undefined');
       // Remove
@@ -122,25 +119,32 @@ export class AuthService {
   }
 
   public async getUserFromSocket(socket: Socket): Promise<User> {
-    const cookie = socket.handshake.headers.cookie;
-    const { Authentication: authenticationToken } = parse(cookie);
+    const headers = socket.handshake.headers;
+    this.logger.log(headers, 'Socket Headers');
+    // const { Authentication: authenticationToken } = parse(cookie);
 
-    const user = await this.getUserFromAuthenticationToken(authenticationToken);
+    // const user = await this.getUserFromDatabaseUsingAuthToken(authenticationToken);
 
-    if (!user) {
-      this.logger.error('Invalid user credentials');
-    }
-    return user;
+    // if (!user) {
+    //   this.logger.error('Invalid user credentials');
+    // }
+    // return user;
+    return null;
   }
 
-  public getCookieWithJwtToken(UUID: string) {
+  public getJwtToken(UUID: string) {
     const payload: ITokenPayload = { UUID };
     const token = this.jwtService.sign(payload);
-    return `Authentication=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${this.configService.get(
-      'JWT_EXPIRATION_TIME',
-    )}`;
+    return { token };
+    // return `Authentication=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${this.configService.get(
+    //   'JWT_EXPIRATION_TIME',
+    // )}`;
     // return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
     //   'JWT_EXPIRATION_TIME',
     // )}`;
+  }
+
+  public async getUserFromResponse(UUID: string): Promise<UserDto> {
+    return this.userService.findOneByUUID(UUID);
   }
 }
