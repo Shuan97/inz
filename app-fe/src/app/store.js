@@ -18,7 +18,12 @@ const thunk = ReduxThunk.withExtraArgument({ API });
 const logger = createLogger({
   collapsed: true,
   colors: {
-    title: ({ type }) => {
+    title: (action) => {
+      if (!action) {
+        console.warn("Action not defined - [dispatch] has missing action");
+        return null;
+      }
+      const { type } = action;
       if (type.indexOf("pending") > -1) return "#FFAA32";
       if (type.indexOf("fulfilled") > -1) return "#00ee32";
       if (type.indexOf("rejected") > -1) return "#ff3232";

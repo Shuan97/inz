@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import { ValidateInputPipe } from './core/pipes/validate.pipe';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';

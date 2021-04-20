@@ -6,22 +6,21 @@ import HeadsetRoundedIcon from "@material-ui/icons/HeadsetRounded";
 import SettingsRoundedIcon from "@material-ui/icons/SettingsRounded";
 import { getUser } from "../../features/userSlice";
 import { useSelector } from "react-redux";
-import { auth } from "../../utils/firebase";
 
 const SidebarProfile = () => {
   const user = useSelector(getUser);
 
   return (
     <StyledSidebarProfile>
-      <Avatar src={user.photo} onClick={() => auth.signOut()} />
+      <Avatar src={user?.photo} onClick={() => null} />
       <ProfileInfo>
-        <h3>{user.displayName}</h3>
+        <h3>{user?.displayName}</h3>
         <p>Shuan#0000</p>
       </ProfileInfo>
       <ProfileIcons>
         <MicRoundedIcon />
         <HeadsetRoundedIcon />
-        <SettingsRoundedIcon onClick={() => auth.signOut()} />
+        <SettingsRoundedIcon onClick={() => null} />
       </ProfileIcons>
     </StyledSidebarProfile>
   );

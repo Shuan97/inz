@@ -7,6 +7,14 @@ export const authUser = createAsyncThunk(
       email: email,
       password: password,
     })
+      .then((response) => response?.data)
+      .catch((error) => rejectWithValue(error.response?.data))
+);
+
+export const fetchUserProfile = createAsyncThunk(
+  "user/fetchUserProfile",
+  (_, { extra, rejectWithValue }) =>
+    extra.API.get("auth/profile")
       .then((response) => response.data)
       .catch((error) => rejectWithValue(error.response.data))
 );
@@ -14,8 +22,12 @@ export const authUser = createAsyncThunk(
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    user: null,
     data: null,
+    token: "",
+    requestStatus: {
+      data: {},
+      token: {},
+    },
   },
   reducers: {
     login: (state, action) => {
@@ -28,14 +40,30 @@ export const userSlice = createSlice({
   extraReducers: {
     // authUser
     [authUser.pending]: (state, action) => {
-      // state.entities.push(action.payload)
+      state.requestStatus.token = action.meta.requestStatus;
     },
     [authUser.fulfilled]: (state, action) => {
-      // state.entities.push(action.payload)
-      state.data = action.payload;
+      const { token } = action.payload;
+      localStorage.setItem("token", token);
+      state.token = token;
+      state.requestStatus.token = action.meta.requestStatus;
     },
     [authUser.rejected]: (state, action) => {
-      // state.entities.push(action.payload)
+      localStorage.removeItem("token");
+      state.token = "";
+      state.requestStatus.token = action.meta.requestStatus;
+    },
+
+    // fetchUserProfile
+    [fetchUserProfile.pending]: (state, action) => {
+      state.requestStatus.data = action.meta.requestStatus;
+    },
+    [fetchUserProfile.fulfilled]: (state, action) => {
+      state.data = action.payload;
+      state.requestStatus.data = action.meta.requestStatus;
+    },
+    [fetchUserProfile.rejected]: (state, action) => {
+      state.requestStatus.data = action.meta.requestStatus;
     },
   },
 });
@@ -43,5 +71,6 @@ export const userSlice = createSlice({
 export const { login, logout } = userSlice.actions;
 
 export const getUser = (state) => state.user.data;
+export const getToken = (state) => state.user.token;
 
 export default userSlice.reducer;

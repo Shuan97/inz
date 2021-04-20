@@ -10,15 +10,19 @@ import Layout from "./components/Layout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "./features/userSlice";
+import { fetchUserProfile, getUser, getToken } from "./features/userSlice";
 import Login from "./components/Auth/Login";
-// import { auth } from "./utils/firebase";
-import { login, logout } from "./features/userSlice";
+import { Redirect, Route, Switch } from "react-router-dom";
+import API from "utils/API";
+import { isEmpty } from "lodash";
+
+const localStorageToken = localStorage.getItem("token");
 
 function App() {
   const [theme, toggleTheme] = UseDarkMode();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const user = useSelector(getUser);
+  const token = useSelector(getToken);
   const notify = () =>
     toast.info("🦄 This is 🌯 <burrittto>! 😂", {
       position: "top-right",
@@ -30,37 +34,46 @@ function App() {
       progress: undefined,
     });
 
-  // useEffect(() => {
-  // 	auth.onAuthStateChanged((authUser) => {
-  // 		if (authUser) {
-  // 			dispatch(
-  // 				login({
-  // 					uid: authUser.uid,
-  // 					photo: authUser.photoURL,
-  // 					email: authUser.email,
-  // 					displayName: authUser.displayName,
-  // 				})
-  // 			);
-  // 		} else {
-  // 			dispatch(logout());
-  // 		}
-  // 	});
-  // }, [dispatch]);
+  useEffect(() => {
+    console.log("User", user);
+  }, [user]);
+
+  useEffect(() => {
+    console.log("TokenLocal", localStorageToken);
+    console.log("TokenStore", token);
+    if (localStorageToken) {
+      API.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${localStorageToken}`;
+    } else {
+      API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+  }, [token]);
+
+  useEffect(() => {
+    console.log("token", localStorageToken);
+    (!!localStorageToken || !!token) &&
+      isEmpty(user) &&
+      dispatch(fetchUserProfile());
+  }, [dispatch, token, user]);
 
   return (
     <ThemeProvider theme={theme === THEME.light ? light : dark}>
       <StyledApp>
-        {user ? (
-          <>
+        {!user && <Redirect to='/login' />}
+        <Switch>
+          <Route exact path='/login'>
+            <Login />
+          </Route>
+          <Route exact path='/'>
             <Navbar toggleTheme={toggleTheme} notify={notify} />
             <Sidebar />
             <Layout />
-          </>
-        ) : (
-          <>
-            <Login />
-          </>
-        )}
+          </Route>
+          <Route path='*'>
+            <Redirect to='/' />
+          </Route>
+        </Switch>
       </StyledApp>
       <ToastContainer
         position='top-right'
