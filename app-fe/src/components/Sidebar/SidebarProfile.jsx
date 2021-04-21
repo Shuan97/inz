@@ -4,11 +4,11 @@ import styled from "styled-components/macro";
 import MicRoundedIcon from "@material-ui/icons/MicRounded";
 import HeadsetRoundedIcon from "@material-ui/icons/HeadsetRounded";
 import SettingsRoundedIcon from "@material-ui/icons/SettingsRounded";
-import { getUser } from "../../features/userSlice";
+import { selectUser } from "../../features/userSlice";
 import { useSelector } from "react-redux";
 
 const SidebarProfile = () => {
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
 
   return (
     <StyledSidebarProfile>

@@ -1,22 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components/macro";
 import ExpandMoreRoundedIcon from "@material-ui/icons/ExpandMoreRounded";
 import SidebarChannel from "./SidebarChannel";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
+import { useSelector } from "react-redux";
+import { selectTextChannels } from "features/channelsSlice";
 
 const SidebarContent = () => {
-  const [channels, setChannels] = useState([]);
-
-  useEffect(() => {
-    // db.collection("channels").onSnapshot((snapshot) => {
-    // 	setChannels(
-    // 		snapshot.docs.map((doc) => ({
-    // 			id: doc.id,
-    // 			channel: doc.data(),
-    // 		}))
-    // 	);
-    // });
-  }, []);
+  const channels = useSelector(selectTextChannels);
 
   const handleAddChannel = () => {
     const channelName = prompt("Enter new channel name");
@@ -38,9 +29,11 @@ const SidebarContent = () => {
         <AddRoundedIcon onClick={handleAddChannel} />
       </ChannelHeaderWrapper>
       <ChannelsList>
-        {channels.map(({ id, channel }) => (
-          <SidebarChannel key={id} id={id} channelName={channel.channelName} />
-        ))}
+        {channels &&
+          channels.length > 0 &&
+          channels.map(({ UUID, name }) => (
+            <SidebarChannel key={UUID} id={UUID} channelName={name} />
+          ))}
       </ChannelsList>
 
       <ChannelHeaderWrapper>

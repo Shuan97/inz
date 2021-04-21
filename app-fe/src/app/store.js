@@ -1,14 +1,17 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import ReduxThunk from "redux-thunk";
 import { createLogger } from "redux-logger";
-import userReducer from "../features/userSlice";
-import appReducer from "../features/appSlice";
-import API from "../utils/API";
+import userReducer from "features/userSlice";
+import channelsReducer from "features/channelsSlice";
+import API from "utils/API";
+import immutableStateInvariantMiddleware from "redux-immutable-state-invariant";
 
 /**
  * Create custom thunk middleware and pass axios API instance
  */
 const thunk = ReduxThunk.withExtraArgument({ API });
+
+const immutableStateInvariant = immutableStateInvariantMiddleware();
 
 /**
  * Create custom logger with new colors
@@ -41,15 +44,23 @@ const logger = createLogger({
  */
 const reducer = combineReducers({
   user: userReducer,
-  app: appReducer,
+  channels: channelsReducer,
 });
+
+const middleware = [];
+
+if (process.env.NODE_ENV !== "production") {
+  middleware.push(immutableStateInvariant, thunk, logger);
+} else {
+  middleware.push(thunk, logger);
+}
 
 /**
  * Configure store, pass reducer object and middleware array
  */
 const store = configureStore({
   reducer: reducer,
-  middleware: [thunk, logger],
+  middleware: middleware,
 });
 
 export default store;

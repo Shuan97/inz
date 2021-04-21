@@ -7,6 +7,8 @@ import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { ConfigService } from '@nestjs/config';
 import { UserDto } from 'modules/users/dto/user.dto';
+import { parse } from 'cookie';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class AuthService {
@@ -118,18 +120,20 @@ export class AuthService {
     return null;
   }
 
-  public async getUserFromSocket(socket: Socket): Promise<User> {
-    const headers = socket.handshake.headers;
-    this.logger.log(headers, 'Socket Headers');
-    // const { Authentication: authenticationToken } = parse(cookie);
+  public async getUserFromSocket(socket: Socket) {
+    const cookie = socket.handshake.headers.cookie;
+    this.logger.log(cookie, 'Socket cookie');
+    const { Authentication: authenticationToken } = parse(cookie);
 
-    // const user = await this.getUserFromDatabaseUsingAuthToken(authenticationToken);
+    const user = await this.getUserFromDatabaseUsingAuthToken(
+      authenticationToken,
+    );
 
-    // if (!user) {
-    //   this.logger.error('Invalid user credentials');
-    // }
-    // return user;
-    return null;
+    if (!user) {
+      this.logger.error('Invalid user credentials');
+      throw new WsException('Invalid credentials.');
+    }
+    return user;
   }
 
   public getJwtToken(UUID: string) {
@@ -142,6 +146,14 @@ export class AuthService {
     // return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
     //   'JWT_EXPIRATION_TIME',
     // )}`;
+  }
+
+  public getCookieWithJwtToken(UUID: string) {
+    const payload: ITokenPayload = { UUID };
+    const token = this.jwtService.sign(payload);
+    return `Authentication=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${this.configService.get(
+      'JWT_EXPIRATION_TIME',
+    )}`;
   }
 
   public async getUserFromResponse(UUID: string): Promise<UserDto> {

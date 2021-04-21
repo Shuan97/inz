@@ -21,6 +21,7 @@ export class UsersService {
 
   async findOneByUUID(UUID: string): Promise<UserDto> {
     const user = await this.userRepository.findOne<User>({ where: { UUID } });
-    return toUserDto(user);
+    // return toUserDto(user); // TODO
+    return user;
   }
 }

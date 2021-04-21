@@ -1,9 +1,6 @@
-import { IsNotEmpty, IsEmail, IsEmpty, MinLength } from 'class-validator';
+import { IsNotEmpty, IsEmail, IsEmpty } from 'class-validator';
 
-export class UserDto {
-  @IsNotEmpty()
-  readonly UUID: string;
-
+export class GetUserDto {
   @IsNotEmpty()
   readonly name: string;
 
@@ -11,9 +8,6 @@ export class UserDto {
   @IsEmail()
   readonly email: string;
 
-  @IsNotEmpty()
-  @MinLength(6)
-  readonly password: string;
   readonly nickname: string;
 
   @IsEmpty()

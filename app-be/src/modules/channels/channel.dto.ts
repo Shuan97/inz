@@ -5,8 +5,5 @@ export class ChannelDto {
   @IsNotEmpty()
   readonly name: string;
 
-  @IsNotEmpty()
-  readonly createdBy: string;
-
   users: User[];
 }

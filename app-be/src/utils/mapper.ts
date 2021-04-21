@@ -1,8 +1,8 @@
-import { UserDto } from 'modules/users/dto/user.dto';
+import { GetUserDto } from 'modules/users/dto/getUser.dto';
 import { User } from 'modules/users/user.entity';
 
-export const toUserDto = (data: User): UserDto => {
+export const toUserDto = (data: User): GetUserDto => {
   const { name, email, nickname, isAdmin, isRootAdmin } = data;
-  const userDto: UserDto = { name, email, nickname, isAdmin, isRootAdmin };
+  const userDto: GetUserDto = { name, email, nickname, isAdmin, isRootAdmin };
   return userDto;
 };

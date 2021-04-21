@@ -4,8 +4,8 @@ import styled from "styled-components/macro";
 import ChatInput from "./ChatInput";
 import ChatMessages from "./ChatMessages";
 import { useSelector } from "react-redux";
-import { getUser } from "../../features/userSlice";
-import { selectChannelId, selectChannelName } from "../../features/appSlice";
+import { selectUser } from "../../features/userSlice";
+import { selectChannelId, selectChannelName } from "features/channelsSlice";
 import API from "../../utils/API";
 
 const Chat = () => {
@@ -33,15 +33,14 @@ const Chat = () => {
   // 	});
   // };
 
-  useEffect(() => {
-    API.get("/messages").then(({ data }) => {
-      console.log(data);
-      setMessages(data);
-    });
-    // database call
-  }, [channelId]);
+  // useEffect(() => {
+  //   API.get("/messages").then(({ data }) => {
+  //     console.log(data);
+  //     setMessages(data);
+  //   });
+  // }, [channelId]);
 
-  useEffect(() => {}, [channelId]);
+  // useEffect(() => {}, [channelId]);
   return (
     <StyledChat>
       <ChatHeader channelName={channelName} />

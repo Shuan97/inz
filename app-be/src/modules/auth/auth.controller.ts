@@ -46,22 +46,16 @@ export class AuthController {
     return token;
   }
 
-  @HttpCode(200)
-  @Get('me')
-  async me(@Headers() headers) {
-    const user = await this.authService.getUserFromDatabaseUsingAuthToken(
-      headers.authorization,
-    );
-    return user || { error: 'error' };
-  }
-
   @Get('profile')
   async getProfile(@Request() req) {
     if (!req.user) {
       this.logger.error('[req.user] does not exist in /profile');
       throw new UnauthorizedException();
     }
-    const user = await this.authService.getUserFromResponse(req.user.UUID);
-    return user;
+    const { user } = req;
+    const cookie = this.authService.getCookieWithJwtToken(user.UUID);
+    req.res.setHeader('Set-Cookie', [cookie]);
+    const profile = await this.authService.getUserFromResponse(req.user.UUID);
+    return profile;
   }
 }

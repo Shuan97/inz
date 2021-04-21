@@ -70,7 +70,7 @@ export const userSlice = createSlice({
 
 export const { login, logout } = userSlice.actions;
 
-export const getUser = (state) => state.user.data;
-export const getToken = (state) => state.user.token;
+export const selectUser = (state) => state.user.data;
+export const selectToken = (state) => state.user.token;
 
 export default userSlice.reducer;

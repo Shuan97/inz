@@ -10,21 +10,26 @@ import Layout from "./components/Layout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserProfile, getUser, getToken } from "./features/userSlice";
+import {
+  fetchUserProfile,
+  selectUser,
+  selectToken,
+} from "./features/userSlice";
 import Login from "./components/Auth/Login";
 import { Redirect, Route, Switch } from "react-router-dom";
 import API from "utils/API";
 import { isEmpty } from "lodash";
+import { fetchTextChannels } from "features/channelsSlice";
 
 const localStorageToken = localStorage.getItem("token");
 
 function App() {
   const [theme, toggleTheme] = UseDarkMode();
   const dispatch = useDispatch();
-  const user = useSelector(getUser);
-  const token = useSelector(getToken);
-  const notify = () =>
-    toast.info("🦄 This is 🌯 <burrittto>! 😂", {
+  const user = useSelector(selectUser);
+  const token = useSelector(selectToken);
+  const notify = ({ message }) =>
+    toast.info(`${message}! 😁`, {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -34,33 +39,38 @@ function App() {
       progress: undefined,
     });
 
+  /**
+   * Pass [Authorization] header into axios instance
+   * from localStorageToken or store token
+   */
   useEffect(() => {
-    console.log("User", user);
-  }, [user]);
-
-  useEffect(() => {
-    console.log("TokenLocal", localStorageToken);
-    console.log("TokenStore", token);
     if (localStorageToken) {
       API.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${localStorageToken}`;
-    } else {
+    } else if (token) {
       API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
   }, [token]);
 
+  /**
+   * If localStorageToken or store token exists fetch user profile
+   */
   useEffect(() => {
-    console.log("token", localStorageToken);
     (!!localStorageToken || !!token) &&
       isEmpty(user) &&
-      dispatch(fetchUserProfile());
+      dispatch(fetchUserProfile()).then(() => {
+        notify({
+          message: "Successfully logged in",
+        });
+        dispatch(fetchTextChannels());
+      });
   }, [dispatch, token, user]);
 
   return (
     <ThemeProvider theme={theme === THEME.light ? light : dark}>
       <StyledApp>
-        {!user && <Redirect to='/login' />}
+        {isEmpty(user) ? <Redirect exact to='/login' /> : <Redirect to='/' />}
         <Switch>
           <Route exact path='/login'>
             <Login />
