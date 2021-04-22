@@ -4,8 +4,11 @@ import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import EmojiEmotionsRoundedIcon from "@material-ui/icons/EmojiEmotionsRounded";
 import GifRoundedIcon from "@material-ui/icons/GifRounded";
 import io from "socket.io-client";
+import { useDispatch } from "react-redux";
+import { addNewMessageToMessages } from "features/messagesSlice";
 
-const ChatInput = ({ channelId, channelName }) => {
+const ChatInput = ({ channelUUID, channelName }) => {
+  const dispatch = useDispatch();
   const [socket, setSocket] = useState(null);
   const [input, setInput] = useState("");
 
@@ -16,7 +19,10 @@ const ChatInput = ({ channelId, channelName }) => {
   const handleNewMessage = (e) => {
     e.preventDefault();
     if (input.length <= 0) return;
-    socket.emit("messageFromChannel", input);
+    socket.emit("messageFromChannel", {
+      body: input,
+      channelUUID: "1f71b2c2-eb3e-43f8-95af-af083469a77d",
+    });
     setInput("");
   };
 
@@ -29,13 +35,12 @@ const ChatInput = ({ channelId, channelName }) => {
   useEffect(() => {
     if (!!socket) {
       console.log("socket is ready");
+      socket.on("messageToChannel", (message) => {
+        console.log(message);
+        dispatch(addNewMessageToMessages(message));
+      });
     }
   }, [socket]);
-
-  !!socket &&
-    socket.on("messageToChannel", (message) => {
-      console.log(message);
-    });
 
   return (
     <StyledChatInput>
@@ -44,7 +49,7 @@ const ChatInput = ({ channelId, channelName }) => {
         <MessageInput
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          disabled={!channelId}
+          disabled={!channelUUID}
           placeholder={
             channelName
               ? `Type message in #${channelName}...`

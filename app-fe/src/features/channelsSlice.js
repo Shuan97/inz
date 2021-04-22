@@ -12,7 +12,7 @@ export const fetchTextChannels = createAsyncThunk(
 export const channelsSlice = createSlice({
   name: "channels",
   initialState: {
-    channelId: null,
+    channelUUID: null,
     channelName: null,
     textChannels: [],
     requestStatus: {
@@ -21,7 +21,7 @@ export const channelsSlice = createSlice({
   },
   reducers: {
     setChannelInfo: (state, action) => {
-      state.channelId = action.payload.channelId;
+      state.channelUUID = action.payload.channelUUID;
       state.channelName = action.payload.channelName;
     },
   },
@@ -42,7 +42,7 @@ export const channelsSlice = createSlice({
 
 export const { setChannelInfo } = channelsSlice.actions;
 
-export const selectChannelId = (state) => state.channels.channelId;
+export const selectChannelUUID = (state) => state.channels.channelUUID;
 export const selectChannelName = (state) => state.channels.channelName;
 export const selectTextChannels = (state) => state.channels.textChannels;
 

@@ -44,12 +44,12 @@ export class MessagesGateway
 
   @SubscribeMessage('messageFromChannel')
   async handleMessage(
-    @MessageBody() content: string,
+    @MessageBody() content: any, // TODO
     @ConnectedSocket() socket: Socket,
   ) {
     const user = await this.authService.getUserFromSocket(socket);
     const message = await this.messagesService.create(
-      { body: content, channelUUID: 'd74e70a5-7015-4a1d-b0e6-eb0cb4279b11' },
+      { body: content.body, channelUUID: content.channelUUID },
       user.UUID,
     );
     const messageWithUser = await this.messagesService.findOne(message.id);

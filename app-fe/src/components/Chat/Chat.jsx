@@ -3,22 +3,27 @@ import ChatHeader from "./ChatHeader";
 import styled from "styled-components/macro";
 import ChatInput from "./ChatInput";
 import ChatMessages from "./ChatMessages";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
-import { selectChannelId, selectChannelName } from "features/channelsSlice";
+import { selectChannelUUID, selectChannelName } from "features/channelsSlice";
 import API from "../../utils/API";
+import { fetchMessagesByChannel } from "features/messagesSlice";
 
 const Chat = () => {
-  // const user = useSelector(selectUser);
-  const channelId = useSelector(selectChannelId);
+  const dispatch = useDispatch();
+  const channelUUID = useSelector(selectChannelUUID);
   const channelName = useSelector(selectChannelName);
 
-  const [messages, setMessages] = useState([]);
+  useEffect(() => {
+    console.log("Hello Chat!@");
+    !!channelUUID &&
+      dispatch(fetchMessagesByChannel({ channelUUID: channelUUID }));
+  }, [dispatch, channelUUID]);
 
   // const handleOnMessage = (newMessage) => {
   // setMessages(...messages, newMessage);
   // console.log("new message: ", newMessage);
-  // axios
+  // API
   // 	.post(
   // 		"http://localhost:3200/api/v1/messages",
   // 		{
@@ -38,14 +43,14 @@ const Chat = () => {
   //     console.log(data);
   //     setMessages(data);
   //   });
-  // }, [channelId]);
+  // }, [channelUUID]);
 
-  // useEffect(() => {}, [channelId]);
+  // useEffect(() => {}, [channelUUID]);
   return (
     <StyledChat>
       <ChatHeader channelName={channelName} />
-      <ChatMessages channelId={channelId} messages={messages} />
-      <ChatInput channelId={channelId} channelName={channelName} />
+      <ChatMessages channelUUID={channelUUID} />
+      <ChatInput channelUUID={channelUUID} channelName={channelName} />
     </StyledChat>
   );
 };
