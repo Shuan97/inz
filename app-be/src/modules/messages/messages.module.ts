@@ -4,10 +4,12 @@ import { MessagesService } from './messages.service';
 import { MessagesController } from './messages.controller';
 import { messagesProviders } from './messages.providers';
 import { MessagesGateway } from './messages.gateway';
+import { Message } from './message.entity';
+import { MESSAGE_REPOSITORY } from 'core/constants';
 
 @Module({
   imports: [AuthModule],
-  providers: [MessagesService, ...messagesProviders, MessagesGateway],
+  providers: [...messagesProviders, MessagesService, MessagesGateway],
   controllers: [MessagesController],
 })
 export class MessagesModule {}

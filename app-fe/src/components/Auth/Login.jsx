@@ -4,26 +4,58 @@ import styled from "styled-components/macro";
 import background from "../../assets/pexels-bg.jpg";
 import { authUser } from "features/userSlice";
 import InputField from "./InputField";
-import Input from "components/common/Form/Input";
+import TextInput from "components/common/Form/Input";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const [validationSchema] = useState(
+    Yup.object().shape({
+      email: Yup.string().email("email to kurwa").required("Dupa"),
+      password: Yup.string().required(),
+    })
+  );
 
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    const body = {
-      email: email,
-      password: password,
-    };
-    dispatch(authUser(body));
+  const handleLoginSubmit = ({ email, password }) => {
+    dispatch(
+      authUser({
+        email: email,
+        password: password,
+      })
+    );
   };
 
   return (
     <StyledLogin>
       <LoginForm>
-        <CenteringWrapper>
+        <Formik
+          initialValues={{
+            email: "",
+            password: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            handleLoginSubmit(values);
+          }}
+        >
+          {() => (
+            <Form className='p-16 h-full'>
+              <TextInput placeholder='email' label='Email' name='email' />
+              <TextInput
+                placeholder='password'
+                label='Password'
+                name='password'
+              />
+              <SubmitButton className='text-white' type='submit'>
+                Login
+              </SubmitButton>
+            </Form>
+          )}
+        </Formik>
+        {/* <CenteringWrapper>
           <LoginContainer>
             <Input label='test' name='test'></Input>
             <InputField
@@ -43,7 +75,7 @@ const Login = () => {
             </SubmitButton>
           </LoginContainer>
           <LogoContainer>Logo</LogoContainer>
-        </CenteringWrapper>
+        </CenteringWrapper> */}
       </LoginForm>
     </StyledLogin>
   );
@@ -62,7 +94,7 @@ const StyledLogin = styled.div`
   background-position: 100%;
 `;
 
-const LoginForm = styled.form`
+const LoginForm = styled.div`
   height: 564px;
   width: 768px;
   padding: 2rem;
@@ -106,5 +138,7 @@ const LogoContainer = styled.div`
 `;
 
 const SubmitButton = styled.button`
+  background: ${({ theme }) => theme.backgroundSecondary};
+  margin-top: 1rem;
   width: 100%;
 `;

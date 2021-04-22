@@ -37,7 +37,7 @@ export const messagesSlice = createSlice({
   },
 });
 
-export const { addNewMessageToMessages } = messagesSlice.actions;
+export const { pushNewMessage } = messagesSlice.actions;
 
 export const selectMessages = (state) => state.messages.messages;
 

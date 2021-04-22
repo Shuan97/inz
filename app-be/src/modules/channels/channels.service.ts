@@ -2,14 +2,20 @@ import { ChannelCreated } from './channelCreated.dto';
 import { User } from './../users/user.entity';
 import { ChannelDto } from './channel.dto';
 import { Channel } from './channel.entity';
-import { CHANNEL_REPOSITORY } from './../../core/constants/index';
+import {
+  CHANNEL_REPOSITORY,
+  MESSAGE_REPOSITORY,
+} from './../../core/constants/index';
 import { Inject, Injectable } from '@nestjs/common';
+import { Message } from 'modules/messages/message.entity';
 
 @Injectable()
 export class ChannelsService {
   constructor(
     @Inject(CHANNEL_REPOSITORY)
     private readonly channelsRepository: typeof Channel,
+    @Inject(MESSAGE_REPOSITORY)
+    private readonly messagesRepository: typeof Message,
   ) {}
 
   async getAll(): Promise<Channel[]> {
@@ -22,9 +28,14 @@ export class ChannelsService {
     });
   }
 
-  async create(channel: ChannelDto, userUUID): Promise<Channel> {
+  async findMessagesByChannel(ChannelUUID: string): Promise<Message[]> {
+    return await this.messagesRepository.findAll<Message>({
+      where: { channelUUID: ChannelUUID },
+    });
+  }
+
+  async create(channel: ChannelDto, userUUID: string): Promise<Channel> {
     const createdBy = userUUID;
-    console.log(createdBy);
     const newChannel = await this.channelsRepository.create<Channel>({
       ...channel,
       userUUID,

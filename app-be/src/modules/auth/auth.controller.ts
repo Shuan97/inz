@@ -39,10 +39,7 @@ export class AuthController {
   @Post('login')
   async login(@Req() request: any) {
     const { user } = request;
-    // const cookie = this.authService.getCookieWithJwtToken(user.UUID);
-    // request.res.setHeader('Set-Cookie', [cookie]);
     const token = this.authService.getJwtToken(user.UUID);
-    // this.logger.log(`User successfully logged in: ${user?.email}`);
     return token;
   }
 

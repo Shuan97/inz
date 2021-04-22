@@ -27,7 +27,7 @@ export class MessagesController {
 
   private messageLogger: Logger = new Logger('MessageController');
 
-  @Public()
+  // @Public()
   @Get()
   async findAll() {
     return await this.messagesService.findAll();
@@ -47,7 +47,7 @@ export class MessagesController {
   //   return message;
   // }
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Post()
   async create(@Body() message: MessageDto, @Request() req) {
     // create a new message and return the newly created message

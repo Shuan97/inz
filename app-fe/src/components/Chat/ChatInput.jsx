@@ -5,7 +5,7 @@ import EmojiEmotionsRoundedIcon from "@material-ui/icons/EmojiEmotionsRounded";
 import GifRoundedIcon from "@material-ui/icons/GifRounded";
 import io from "socket.io-client";
 import { useDispatch } from "react-redux";
-import { addNewMessageToMessages } from "features/messagesSlice";
+import { pushNewMessage } from "features/messagesSlice";
 
 const ChatInput = ({ channelUUID, channelName }) => {
   const dispatch = useDispatch();
@@ -37,10 +37,10 @@ const ChatInput = ({ channelUUID, channelName }) => {
       console.log("socket is ready");
       socket.on("messageToChannel", (message) => {
         console.log(message);
-        dispatch(addNewMessageToMessages(message));
+        dispatch(pushNewMessage(message));
       });
     }
-  }, [socket]);
+  }, [dispatch, socket]);
 
   return (
     <StyledChatInput>

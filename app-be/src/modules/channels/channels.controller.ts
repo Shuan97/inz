@@ -2,7 +2,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Channel } from './channel.entity';
 import { ChannelDto } from './channel.dto';
 import { ChannelsService } from './channels.service';
-import { Controller, Post, Body, Request, Get } from '@nestjs/common';
+import { Controller, Post, Body, Request, Get, Param } from '@nestjs/common';
 
 @Controller('channels')
 export class ChannelsController {
@@ -11,6 +11,13 @@ export class ChannelsController {
   @Get()
   async findAll() {
     return await this.channelsService.getAll();
+  }
+
+  @Get(':UUID/messages')
+  async findAllWithMessages(@Param('UUID') UUID: any) {
+    debugger;
+    console.log(UUID);
+    return await this.channelsService.findMessagesByChannel(UUID);
   }
 
   @Post('/new')

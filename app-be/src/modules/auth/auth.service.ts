@@ -140,12 +140,6 @@ export class AuthService {
     const payload: ITokenPayload = { UUID };
     const token = this.jwtService.sign(payload);
     return { token };
-    // return `Authentication=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${this.configService.get(
-    //   'JWT_EXPIRATION_TIME',
-    // )}`;
-    // return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-    //   'JWT_EXPIRATION_TIME',
-    // )}`;
   }
 
   public getCookieWithJwtToken(UUID: string) {
