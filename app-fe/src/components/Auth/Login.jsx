@@ -4,6 +4,7 @@ import styled from "styled-components/macro";
 import background from "../../assets/pexels-bg.jpg";
 import { authUser } from "features/userSlice";
 import InputField from "./InputField";
+import Input from "components/common/Form/Input";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ const Login = () => {
       <LoginForm>
         <CenteringWrapper>
           <LoginContainer>
+            <Input label='test' name='test'></Input>
             <InputField
               label='Email'
               type='text'

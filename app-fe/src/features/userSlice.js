@@ -31,10 +31,12 @@ export const userSlice = createSlice({
   },
   reducers: {
     login: (state, action) => {
-      state.user = action.payload;
+      state.data = action.payload;
     },
     logout: (state) => {
-      state.user = null;
+      state.data = null;
+      state.token = null;
+      localStorage.removeItem("token");
     },
   },
   extraReducers: {
