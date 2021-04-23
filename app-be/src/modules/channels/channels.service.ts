@@ -31,6 +31,13 @@ export class ChannelsService {
   async findMessagesByChannel(ChannelUUID: string): Promise<Message[]> {
     return await this.messagesRepository.findAll<Message>({
       where: { channelUUID: ChannelUUID },
+      include: [
+        {
+          model: User,
+          // attributes: { include: ['UUID', 'name', 'email', 'nickname'] },
+          attributes: ['UUID', 'name', 'email', 'nickname'],
+        },
+      ],
     });
   }
 

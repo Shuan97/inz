@@ -26,7 +26,7 @@ export class ValidateInputPipe extends ValidationPipe {
   //     return error;
   //   }
   private handleError(errors) {
-    // return errors.response.message.map((error) => error);
-    return errors.map((error) => error.constraints);
+    return errors.response.message.map((error) => error);
+    // return errors.map((error) => error.constraints);
   }
 }

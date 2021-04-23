@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsEmail, IsEmpty, MinLength } from 'class-validator';
 
 export class UserDto {
-  @IsNotEmpty()
+  // @IsNotEmpty()
   readonly UUID: string;
 
   @IsNotEmpty()

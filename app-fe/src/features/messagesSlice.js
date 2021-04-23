@@ -3,10 +3,12 @@ import { thunkStatus } from "constants/status";
 
 export const fetchMessagesByChannel = createAsyncThunk(
   "messages/fetchMessagesByChannel",
-  ({ channelUUID }, { extra, rejectWithValue }) =>
-    extra.API.get("messages")
+  (_, { extra, rejectWithValue, getState }) => {
+    const { channels } = getState();
+    return extra.API.get(`channels/${channels.channelUUID}/messages`)
       .then((response) => response.data)
-      .catch((error) => rejectWithValue(error.response.data))
+      .catch((error) => rejectWithValue(error.response.data));
+  }
 );
 
 export const messagesSlice = createSlice({
@@ -19,6 +21,7 @@ export const messagesSlice = createSlice({
   },
   reducers: {
     pushNewMessage: (state, action) => {
+      console.log("Push to array");
       state.messages = [...state.messages, action.payload];
     },
   },

@@ -33,9 +33,16 @@ const logger = createLogger({
       if (type.indexOf("rejected") > -1) return "#ff3232";
       if (type.indexOf("update") > -1) return "#11bcff";
       console.log(
-        `\x1b[36m[Logger]\x1b[39m Action type \x1b[33m[${type}]\x1b[39m not recognized in custom logger.`
+        `%c[Logger]%c Action type %c[${type}] %cnot recognized in custom logger.`,
+        "color: #00eeff",
+        "color: #bbc900",
+        "color: #22aa00",
+        "color: #bbc900"
       );
-      return "#1170ff";
+      // console.log(
+      //   `\x1b[36m[Logger]\x1b[39m Action type \x1b[33m[${type}]\x1b[39m not recognized in custom logger.`
+      // );
+      return "#22bbff";
     },
   },
 });

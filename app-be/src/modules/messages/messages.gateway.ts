@@ -57,7 +57,10 @@ export class MessagesGateway
       `User: ${messageWithUser.user.name} | message: ${messageWithUser.body}`,
     );
     this.messageLogger.log(user.UUID);
-    // this.messageLogger.log(messageWithUser);
-    this.server.emit('messageToChannel', messageWithUser);
+    this.messageLogger.log(content.channelUUID, 'Channel');
+    this.server.emit(
+      `messageToChannel=${content.channelUUID}`,
+      messageWithUser,
+    );
   }
 }

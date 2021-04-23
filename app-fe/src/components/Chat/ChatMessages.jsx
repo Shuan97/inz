@@ -4,12 +4,8 @@ import { useSelector } from "react-redux";
 import styled from "styled-components/macro";
 import Message from "../Message/Message";
 
-const ChatMessages = ({ channelUUID }) => {
+const ChatMessages = () => {
   const messages = useSelector(selectMessages);
-
-  useEffect(() => {
-    console.log("messages", messages);
-  }, [messages]);
 
   return (
     <StyledChatMessages>

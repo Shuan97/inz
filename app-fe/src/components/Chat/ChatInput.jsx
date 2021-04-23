@@ -4,43 +4,68 @@ import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import EmojiEmotionsRoundedIcon from "@material-ui/icons/EmojiEmotionsRounded";
 import GifRoundedIcon from "@material-ui/icons/GifRounded";
 import io from "socket.io-client";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { pushNewMessage } from "features/messagesSlice";
+import { selectChannelUUID } from "features/channelsSlice";
 
-const ChatInput = ({ channelUUID, channelName }) => {
+const ChatInput = ({ channelName }) => {
   const dispatch = useDispatch();
+  const channelUUID = useSelector(selectChannelUUID);
   const [socket, setSocket] = useState(null);
   const [input, setInput] = useState("");
 
-  // establish socket connection
-
-  // const socket = io("http://localhost:4001");
-
   const handleNewMessage = (e) => {
     e.preventDefault();
-    if (input.length <= 0) return;
+    if (input.length <= 0 || !channelUUID) return;
     socket.emit("messageFromChannel", {
       body: input,
-      channelUUID: "1f71b2c2-eb3e-43f8-95af-af083469a77d",
+      channelUUID: channelUUID,
     });
     setInput("");
   };
 
   useEffect(() => {
-    // !!token &&
-    console.log("Hello Socket!");
     setSocket(io("http://localhost:4001"));
   }, []);
 
   useEffect(() => {
-    if (!!socket) {
-      console.log("socket is ready");
-      socket.on("messageToChannel", (message) => {
+    console.log("socket", socket);
+    if (!!socket && !!channelUUID) {
+      socket.off();
+      socket.on(`messageToChannel=${channelUUID}`, (message) => {
         console.log(message);
         dispatch(pushNewMessage(message));
       });
+      // socket.on(
+      //   `messageToChannel=1f71b2c2-eb3e-43f8-95af-af083469a77d`,
+      //   (message) => {
+      //     console.log(message);
+      //     dispatch(pushNewMessage(message));
+      //   }
+      // );
+      // socket.on(
+      //   `messageToChannel=31301adc-d2f3-4d7d-b2bf-58971b694995`,
+      //   (message) => {
+      //     console.log(message);
+      //     dispatch(pushNewMessage(message));
+      //   }
+      // );
+      // socket.on(
+      //   `messageToChannel=48b8b5a0-05a1-402c-ae9c-0753445e3339`,
+      //   (message) => {
+      //     console.log(message);
+      //     dispatch(pushNewMessage(message));
+      //   }
+      // );
+      // socket.on(
+      //   `messageToChannel=53c5079b-5e73-4f8f-b7d6-06e36935477f`,
+      //   (message) => {
+      //     console.log(message);
+      //     dispatch(pushNewMessage(message));
+      //   }
+      // );
     }
-  }, [dispatch, socket]);
+  }, [dispatch, socket, channelUUID]);
 
   return (
     <StyledChatInput>

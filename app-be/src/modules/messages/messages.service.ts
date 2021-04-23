@@ -10,7 +10,7 @@ export class MessagesService {
     @Inject(MESSAGE_REPOSITORY)
     private readonly messageRepository: typeof Message,
   ) {
-    // Message.sync({ force: true });
+    Message.sync({ force: true });
   }
 
   async create(message: MessageDto, userUUID): Promise<Message> {

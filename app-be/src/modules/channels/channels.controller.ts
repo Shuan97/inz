@@ -15,8 +15,6 @@ export class ChannelsController {
 
   @Get(':UUID/messages')
   async findAllWithMessages(@Param('UUID') UUID: any) {
-    debugger;
-    console.log(UUID);
     return await this.channelsService.findMessagesByChannel(UUID);
   }
 

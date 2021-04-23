@@ -16,8 +16,7 @@ const Chat = () => {
 
   useEffect(() => {
     console.log("Hello Chat!@");
-    !!channelUUID &&
-      dispatch(fetchMessagesByChannel({ channelUUID: channelUUID }));
+    !!channelUUID && dispatch(fetchMessagesByChannel());
   }, [dispatch, channelUUID]);
 
   // const handleOnMessage = (newMessage) => {
@@ -49,7 +48,7 @@ const Chat = () => {
   return (
     <StyledChat>
       <ChatHeader channelName={channelName} />
-      <ChatMessages channelUUID={channelUUID} />
+      <ChatMessages />
       <ChatInput channelUUID={channelUUID} channelName={channelName} />
     </StyledChat>
   );
