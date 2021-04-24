@@ -45,11 +45,11 @@ export class AuthController {
 
   @Get('profile')
   async getProfile(@Request() req) {
-    if (!req.user) {
+    const { user } = req;
+    if (!user) {
       this.logger.error('[req.user] does not exist in /profile');
       throw new UnauthorizedException();
     }
-    const { user } = req;
     const cookie = this.authService.getCookieWithJwtToken(user.UUID);
     req.res.setHeader('Set-Cookie', [cookie]);
     const profile = await this.authService.getUserFromResponse(req.user.UUID);

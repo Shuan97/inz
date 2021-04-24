@@ -1,12 +1,11 @@
+import TextInput from "components/common/Form/Input";
+import { authUser } from "features/userSlice";
+import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components/macro";
-import background from "../../assets/pexels-bg.jpg";
-import { authUser } from "features/userSlice";
-import InputField from "./InputField";
-import TextInput from "components/common/Form/Input";
-import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import background from "../../assets/pexels-bg.jpg";
 
 const Login = () => {
   // const [email, setEmail] = useState("");

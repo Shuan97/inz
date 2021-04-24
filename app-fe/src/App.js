@@ -69,15 +69,18 @@ function App() {
 
   return (
     <ThemeProvider theme={theme === THEME.light ? light : dark}>
-      <StyledApp>
+      <StyledApp
+        onContextMenu={(e) => {
+          e.preventDefault();
+          console.log("Right mouse button pressed!");
+        }}
+      >
         {isEmpty(user) ? <Redirect exact to='/login' /> : <Redirect to='/' />}
         <Switch>
           <Route exact path='/login'>
-            <Login />
+            <Login toggleTheme={toggleTheme} notify={notify} />
           </Route>
           <Route exact path='/'>
-            <Navbar toggleTheme={toggleTheme} notify={notify} />
-            <Sidebar />
             <Layout />
           </Route>
           <Route path='*'>
