@@ -1,0 +1,8 @@
+export const SEQUELIZE = 'SEQUELIZE';
+export const DEVELOPMENT = 'development';
+export const TEST = 'test';
+export const PRODUCTION = 'production';
+export const USER_REPOSITORY = 'USER_REPOSITORY';
+export const MESSAGE_REPOSITORY = 'MESSAGE_REPOSITORY';
+export const CHANNEL_REPOSITORY = 'CHANNEL_REPOSITORY';
+export const USER_CHANNEL_REPOSITORY = 'USER_CHANNEL_REPOSITORY';
